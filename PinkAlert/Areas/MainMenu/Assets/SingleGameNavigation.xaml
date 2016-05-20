@@ -1,0 +1,18 @@
+﻿<models:MenuNavigationModel
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" 
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:models="using:PinkAlert.Models"
+    xmlns:localViews="using:PinkAlert.Areas.MainMenu.Views"
+    ViewType="localViews:SingleGamePage">
+    <models:MenuNavigationModel.MenuConfig>
+        <models:MenuConfig>
+            <models:MenuConfig.TopButtons>
+                <models:MenuButtonModel IsEnabled="True" Text="新战役" NavigationUri="ms-appx:///Areas/MainMenu/Assets/NewCampaignNavigation.xaml"/>
+                <models:MenuButtonModel IsEnabled="False" Text="遭遇战"/>
+            </models:MenuConfig.TopButtons>
+            <models:MenuConfig.BottomButtons>
+                <models:MenuButtonModel IsEnabled="True" Text="主菜单" NavigationUri="ms-appx:///Areas/MainMenu/Assets/MainMenuNavigation.xaml"/>
+            </models:MenuConfig.BottomButtons>
+        </models:MenuConfig>
+    </models:MenuNavigationModel.MenuConfig>
+</models:MenuNavigationModel>

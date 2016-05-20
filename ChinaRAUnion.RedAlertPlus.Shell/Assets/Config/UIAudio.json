@@ -1,0 +1,9 @@
+﻿{
+  "ThemeAudios": [
+    {
+      "name": "Intro",
+      "source": "ms-appx:///Assets/Audio/drok.ogg",
+      "contentType": "audio/ogg"
+    }
+  ]
+}

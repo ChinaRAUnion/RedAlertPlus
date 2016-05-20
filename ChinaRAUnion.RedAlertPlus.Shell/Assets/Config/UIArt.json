@@ -1,0 +1,27 @@
+﻿{
+  "FrameAnimationImages": [
+    {
+      "name": "AlertMeterEnteringAnimationSource",
+      "source": "ms-appx:///Assets/Art/sdwrntmp.png",
+      "frameSize": "168,177",
+      "framesCount": 6,
+      "isLooping": false
+    },
+    {
+      "name": "AlertMeterPointerAnimationSource",
+      "source": "ms-appx:///Assets/Art/sdwrnanm.png",
+      "frameSize": "92,53",
+      "framesCount": 91,
+      "ColumnsCount": 11,
+      "isLooping": true
+    },
+    {
+      "name": "MenuButtonAnimationSource",
+      "source": "ms-appx:///Assets/Art/sdbtnanm.png",
+      "frameSize": "156,42",
+      "framesCount": 17,
+      "ColumnsCount": 6,
+      "isLooping": false
+    }
+  ]
+}

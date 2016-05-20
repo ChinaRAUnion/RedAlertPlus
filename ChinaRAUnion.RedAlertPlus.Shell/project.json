@@ -1,6 +1,13 @@
 ﻿{
   "dependencies": {
-    "Microsoft.NETCore.UniversalWindowsPlatform": "5.0.0"
+    "Caliburn.Micro": "3.0.1",
+    "Microsoft.NETCore.UniversalWindowsPlatform": "5.0.0",
+    "Tomato.Media.Codec": "0.0.4-alpha6",
+    "Tomato.Media.Gaming": "0.0.1-alpha1",
+    "Tomato.Mvvm.Caliburn": "0.0.1-alpha1",
+    "Tomato.Mvvm.Core": "0.0.1-alpha2",
+    "Tomato.Mvvm.Xaml": "0.0.1-alpha3",
+    "Win2d.uwp": "1.18.0"
   },
   "frameworks": {
     "uap10.0": {}
