@@ -101,6 +101,10 @@
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Areas\BattleControl\ViewModels\BattleControlViewModel.cs" />
+    <Compile Include="Areas\BattleControl\Views\BattleControlView.xaml.cs">
+      <DependentUpon>BattleControlView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Areas\MainMenu\ViewModels\MainMenuLayoutViewModel.cs" />
     <Compile Include="Areas\MainMenu\ViewModels\MainMenuViewModel.cs" />
     <Compile Include="Areas\MainMenu\ViewModels\MenuButtonViewModel.cs" />
@@ -168,6 +172,10 @@
     </ApplicationDefinition>
   </ItemGroup>
   <ItemGroup>
+    <Page Include="Areas\BattleControl\Views\BattleControlView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Areas\MainMenu\Views\MainMenuLayoutView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -201,6 +209,10 @@
     <ProjectReference Include="..\ChinaRAUnion.RedAlertPlus.Core\ChinaRAUnion.RedAlertPlus.Core.csproj">
       <Project>{998B327E-48E3-4DD0-B2EC-6EB752670A25}</Project>
       <Name>ChinaRAUnion.RedAlertPlus.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ChinaRAUnion.RedAlertPlus.Interop\ChinaRAUnion.RedAlertPlus.Interop.vcxproj">
+      <Project>{81b78bc6-f4e4-412d-aa0a-529580d530e5}</Project>
+      <Name>ChinaRAUnion.RedAlertPlus.Interop</Name>
     </ProjectReference>
     <ProjectReference Include="..\ChinaRAUnion.RedAlertPlus.Resource\ChinaRAUnion.RedAlertPlus.Resource.csproj">
       <Project>{f9528295-a31d-4d25-8725-08c3e0eb266d}</Project>

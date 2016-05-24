@@ -18,6 +18,7 @@ namespace ChinaRAUnion.RedAlertPlus
             container.Singleton<Shell.Areas.MainMenu.ViewModels.MainMenuLayoutViewModel>();
             container.PerRequest<Shell.Areas.MainMenu.ViewModels.MainMenuViewModel>();
             container.PerRequest<Shell.Areas.MainMenu.ViewModels.SinglePlayerViewModel>();
+            container.PerRequest<Shell.Areas.BattleControl.ViewModels.BattleControlViewModel>();
             //container.PerRequest<PlaylistViewModel>();
             //container.Singleton<PlayingViewModel>();
             //container.Singleton<LyricsViewModel>();

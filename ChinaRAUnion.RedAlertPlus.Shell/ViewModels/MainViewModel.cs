@@ -1,4 +1,5 @@
 ﻿using Caliburn.Micro;
+using ChinaRAUnion.RedAlertPlus.Shell.Areas.BattleControl.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -27,7 +28,8 @@ namespace ChinaRAUnion.RedAlertPlus.Shell.ViewModels
 
         private void NavigateToSplash()
         {
-            _navigationService.For<SplashViewModel>().Navigate();
+            //_navigationService.For<SplashViewModel>().Navigate();
+            _navigationService.For<BattleControlViewModel>().Navigate();
         }
     }
 }

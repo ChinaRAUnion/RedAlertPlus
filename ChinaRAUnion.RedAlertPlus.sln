@@ -11,6 +11,17 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ChinaRAUnion.RedAlertPlus.C
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ChinaRAUnion.RedAlertPlus.Audio", "ChinaRAUnion.RedAlertPlus.Audio\ChinaRAUnion.RedAlertPlus.Audio.csproj", "{78AD1E60-EF61-4D42-8AD7-454A356BBB62}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tools", "Tools", "{F31BE5C4-F81C-4B7D-BD36-7979880706A1}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ChinaRAUnion.RedAlertPlus.Map", "ChinaRAUnion.RedAlertPlus.Map\ChinaRAUnion.RedAlertPlus.Map.csproj", "{5A865E7E-ED20-425C-AF87-007D78C993D1}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ChinaRAUnion.RedAlertPlus.Interop", "ChinaRAUnion.RedAlertPlus.Interop\ChinaRAUnion.RedAlertPlus.Interop.vcxproj", "{81B78BC6-F4E4-412D-AA0A-529580D530E5}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Include", "Include", "{452D268E-7606-406E-8C15-127D15BB8836}"
+	ProjectSection(SolutionItems) = preProject
+		include\common.h = include\common.h
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -91,6 +102,36 @@ Global
 		{78AD1E60-EF61-4D42-8AD7-454A356BBB62}.Release|x64.Build.0 = Release|x64
 		{78AD1E60-EF61-4D42-8AD7-454A356BBB62}.Release|x86.ActiveCfg = Release|x86
 		{78AD1E60-EF61-4D42-8AD7-454A356BBB62}.Release|x86.Build.0 = Release|x86
+		{5A865E7E-ED20-425C-AF87-007D78C993D1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5A865E7E-ED20-425C-AF87-007D78C993D1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5A865E7E-ED20-425C-AF87-007D78C993D1}.Debug|ARM.ActiveCfg = Debug|ARM
+		{5A865E7E-ED20-425C-AF87-007D78C993D1}.Debug|ARM.Build.0 = Debug|ARM
+		{5A865E7E-ED20-425C-AF87-007D78C993D1}.Debug|x64.ActiveCfg = Debug|x64
+		{5A865E7E-ED20-425C-AF87-007D78C993D1}.Debug|x64.Build.0 = Debug|x64
+		{5A865E7E-ED20-425C-AF87-007D78C993D1}.Debug|x86.ActiveCfg = Debug|x86
+		{5A865E7E-ED20-425C-AF87-007D78C993D1}.Debug|x86.Build.0 = Debug|x86
+		{5A865E7E-ED20-425C-AF87-007D78C993D1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5A865E7E-ED20-425C-AF87-007D78C993D1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5A865E7E-ED20-425C-AF87-007D78C993D1}.Release|ARM.ActiveCfg = Release|ARM
+		{5A865E7E-ED20-425C-AF87-007D78C993D1}.Release|ARM.Build.0 = Release|ARM
+		{5A865E7E-ED20-425C-AF87-007D78C993D1}.Release|x64.ActiveCfg = Release|x64
+		{5A865E7E-ED20-425C-AF87-007D78C993D1}.Release|x64.Build.0 = Release|x64
+		{5A865E7E-ED20-425C-AF87-007D78C993D1}.Release|x86.ActiveCfg = Release|x86
+		{5A865E7E-ED20-425C-AF87-007D78C993D1}.Release|x86.Build.0 = Release|x86
+		{81B78BC6-F4E4-412D-AA0A-529580D530E5}.Debug|Any CPU.ActiveCfg = Debug|Win32
+		{81B78BC6-F4E4-412D-AA0A-529580D530E5}.Debug|ARM.ActiveCfg = Debug|ARM
+		{81B78BC6-F4E4-412D-AA0A-529580D530E5}.Debug|ARM.Build.0 = Debug|ARM
+		{81B78BC6-F4E4-412D-AA0A-529580D530E5}.Debug|x64.ActiveCfg = Debug|x64
+		{81B78BC6-F4E4-412D-AA0A-529580D530E5}.Debug|x64.Build.0 = Debug|x64
+		{81B78BC6-F4E4-412D-AA0A-529580D530E5}.Debug|x86.ActiveCfg = Debug|Win32
+		{81B78BC6-F4E4-412D-AA0A-529580D530E5}.Debug|x86.Build.0 = Debug|Win32
+		{81B78BC6-F4E4-412D-AA0A-529580D530E5}.Release|Any CPU.ActiveCfg = Release|Win32
+		{81B78BC6-F4E4-412D-AA0A-529580D530E5}.Release|ARM.ActiveCfg = Release|ARM
+		{81B78BC6-F4E4-412D-AA0A-529580D530E5}.Release|ARM.Build.0 = Release|ARM
+		{81B78BC6-F4E4-412D-AA0A-529580D530E5}.Release|x64.ActiveCfg = Release|x64
+		{81B78BC6-F4E4-412D-AA0A-529580D530E5}.Release|x64.Build.0 = Release|x64
+		{81B78BC6-F4E4-412D-AA0A-529580D530E5}.Release|x86.ActiveCfg = Release|Win32
+		{81B78BC6-F4E4-412D-AA0A-529580D530E5}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
