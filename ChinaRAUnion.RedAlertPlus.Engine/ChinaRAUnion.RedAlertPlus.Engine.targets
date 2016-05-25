@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+
+  <ItemGroup Condition="'$(TargetPlatformIdentifier)' == 'UAP'">
+      <ReferenceCopyLocalPaths Include="$(MSBuildThisFileDirectory)..\bin\$(Platform)\$(Configuration)\ChinaRAUnion.RedAlertPlus.Engine\ChinaRAUnion.RedAlertPlus.Engine.dll" />
+  </ItemGroup>
+
+</Project>

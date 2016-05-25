@@ -11,16 +11,16 @@ namespace ChinaRAUnion.RedAlertPlus.Shell.Areas.BattleControl.ViewModels
 {
     public class BattleControlViewModel : BindableBase
     {
-        private readonly SwapChainProvider _swapChainProvider;
+        private readonly GameEngine _gameEngine;
 
-        public BattleControlViewModel()
+        public BattleControlViewModel(IGameEngineResourceResolver resourceResolver)
         {
-            _swapChainProvider = new SwapChainProvider();
+            _gameEngine = new GameEngine(resourceResolver);
         }
 
         public void SetupSwapChainPanel(object sender, RoutedEventArgs e)
         {
-            _swapChainProvider.SetSwapChainPanel((SwapChainPanel)sender);
+            _gameEngine.SetSwapChainPanel((SwapChainPanel)sender);
         }
     }
 }

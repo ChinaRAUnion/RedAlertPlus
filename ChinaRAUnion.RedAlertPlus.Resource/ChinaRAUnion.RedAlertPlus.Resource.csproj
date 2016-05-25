@@ -107,6 +107,7 @@
     <None Include="project.json" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="GameEngineResourceResolver.cs" />
     <Compile Include="Models\FrameAnimationImageResourceMap.cs" />
     <Compile Include="Models\InputStreamWithContentTypeResourceMap.cs" />
     <Compile Include="ResourceBind.cs" />
@@ -120,6 +121,10 @@
     <ProjectReference Include="..\ChinaRAUnion.RedAlertPlus.Core\ChinaRAUnion.RedAlertPlus.Core.csproj">
       <Project>{998B327E-48E3-4DD0-B2EC-6EB752670A25}</Project>
       <Name>ChinaRAUnion.RedAlertPlus.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ChinaRAUnion.RedAlertPlus.Interop\ChinaRAUnion.RedAlertPlus.Interop.vcxproj">
+      <Project>{81b78bc6-f4e4-412d-aa0a-529580d530e5}</Project>
+      <Name>ChinaRAUnion.RedAlertPlus.Interop</Name>
     </ProjectReference>
   </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">

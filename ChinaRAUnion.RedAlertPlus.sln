@@ -22,6 +22,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Include", "Include", "{452D
 		include\common.h = include\common.h
 	EndProjectSection
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ChinaRAUnion.RedAlertPlus.Engine", "ChinaRAUnion.RedAlertPlus.Engine\ChinaRAUnion.RedAlertPlus.Engine.vcxproj", "{E4420DA6-0F0F-4A2E-8EBC-513FA19E099E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -132,6 +134,20 @@ Global
 		{81B78BC6-F4E4-412D-AA0A-529580D530E5}.Release|x64.Build.0 = Release|x64
 		{81B78BC6-F4E4-412D-AA0A-529580D530E5}.Release|x86.ActiveCfg = Release|Win32
 		{81B78BC6-F4E4-412D-AA0A-529580D530E5}.Release|x86.Build.0 = Release|Win32
+		{E4420DA6-0F0F-4A2E-8EBC-513FA19E099E}.Debug|Any CPU.ActiveCfg = Debug|Win32
+		{E4420DA6-0F0F-4A2E-8EBC-513FA19E099E}.Debug|ARM.ActiveCfg = Debug|ARM
+		{E4420DA6-0F0F-4A2E-8EBC-513FA19E099E}.Debug|ARM.Build.0 = Debug|ARM
+		{E4420DA6-0F0F-4A2E-8EBC-513FA19E099E}.Debug|x64.ActiveCfg = Debug|x64
+		{E4420DA6-0F0F-4A2E-8EBC-513FA19E099E}.Debug|x64.Build.0 = Debug|x64
+		{E4420DA6-0F0F-4A2E-8EBC-513FA19E099E}.Debug|x86.ActiveCfg = Debug|Win32
+		{E4420DA6-0F0F-4A2E-8EBC-513FA19E099E}.Debug|x86.Build.0 = Debug|Win32
+		{E4420DA6-0F0F-4A2E-8EBC-513FA19E099E}.Release|Any CPU.ActiveCfg = Release|Win32
+		{E4420DA6-0F0F-4A2E-8EBC-513FA19E099E}.Release|ARM.ActiveCfg = Release|ARM
+		{E4420DA6-0F0F-4A2E-8EBC-513FA19E099E}.Release|ARM.Build.0 = Release|ARM
+		{E4420DA6-0F0F-4A2E-8EBC-513FA19E099E}.Release|x64.ActiveCfg = Release|x64
+		{E4420DA6-0F0F-4A2E-8EBC-513FA19E099E}.Release|x64.Build.0 = Release|x64
+		{E4420DA6-0F0F-4A2E-8EBC-513FA19E099E}.Release|x86.ActiveCfg = Release|Win32
+		{E4420DA6-0F0F-4A2E-8EBC-513FA19E099E}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

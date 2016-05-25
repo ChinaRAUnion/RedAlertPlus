@@ -29,6 +29,7 @@ namespace ChinaRAUnion.RedAlertPlus
         public void UseResourceManager(params Uri[] resourceConfigFiles)
         {
             _container.Instance<IResourceManager>(new ResourceManager(resourceConfigFiles));
+            _container.Singleton<IGameEngineResourceResolver, GameEngineResourceResolver>();
         }
     }
 }
