@@ -15,3 +15,4 @@
 #include <ppltasks.h>
 #include <pplawait.h>
 #include "../include/d3dx12.h"
+#include <DirectXMath.h>

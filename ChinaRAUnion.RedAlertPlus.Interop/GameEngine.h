@@ -42,6 +42,7 @@ public:
 	GameEngine(IGameEngineResourceResolver^ resourceResovler);
 
 	void SetSwapChainPanel(Windows::UI::Xaml::Controls::SwapChainPanel^ panel);
+	Windows::Foundation::IAsyncAction^ InitializeAsync();
 private:
 	void UpdateDisplayMetrices();
 	void OnSizeChanged(Platform::Object ^sender, Windows::UI::Xaml::SizeChangedEventArgs ^e);

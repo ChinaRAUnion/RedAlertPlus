@@ -158,6 +158,11 @@ void GameEngine::SetSwapChainPanel(Windows::UI::Xaml::Controls::SwapChainPanel ^
 	UpdateDisplayMetrices();
 }
 
+Windows::Foundation::IAsyncAction ^ GameEngine::InitializeAsync()
+{
+	return concurrency::create_async([this] {return _engine->InitializeAsync(); });
+}
+
 void GameEngine::UpdateDisplayMetrices()
 {
 	if (_swapChainPanel)

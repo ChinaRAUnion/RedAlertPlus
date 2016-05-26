@@ -28,8 +28,7 @@ namespace ChinaRAUnion.RedAlertPlus.Shell.ViewModels
 
         private void NavigateToSplash()
         {
-            //_navigationService.For<SplashViewModel>().Navigate();
-            _navigationService.For<BattleControlViewModel>().Navigate();
+            _navigationService.For<SplashViewModel>().Navigate();
         }
     }
 }

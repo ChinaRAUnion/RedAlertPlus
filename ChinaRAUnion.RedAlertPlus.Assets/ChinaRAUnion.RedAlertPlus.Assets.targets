@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+
+  <PropertyGroup>
+    <RedAlertPlus-Platform Condition="'$(Platform)' == 'x86'">Win32</RedAlertPlus-Platform>
+    <RedAlertPlus-Platform Condition="'$(Platform)' != 'x86'">$(Platform)</RedAlertPlus-Platform>
+  </PropertyGroup>
+  <ItemGroup>
+    <Content Include="$(SolutionDir)bin\Shaders\$(RedAlertPlus-Platform)\$(Configuration)\TileLayerPS.cso">
+      <Link>Assets\Shaders\TileLayerPS.cso</Link>
+    </Content>
+    <Content Include="$(SolutionDir)bin\Shaders\$(RedAlertPlus-Platform)\$(Configuration)\TileLayerVS.cso">
+      <Link>Assets\Shaders\TileLayerVS.cso</Link>
+    </Content>
+  </ItemGroup>
+
+</Project>

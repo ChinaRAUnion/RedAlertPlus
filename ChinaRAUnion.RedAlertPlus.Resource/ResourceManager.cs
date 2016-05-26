@@ -23,6 +23,8 @@ namespace ChinaRAUnion.RedAlertPlus.Resource
 
         public IResourceMap<InputStreamWithContentTypeResource, IRandomAccessStream> ThemeAudios { get; private set; }
 
+        public IResourceMap<InputStreamWithContentTypeResource, IRandomAccessStream> Shaders { get; private set; }
+
         private readonly Uri[] _configFiles;
         public ResourceManager(Uri[] configFiles)
         {
@@ -34,11 +36,13 @@ namespace ChinaRAUnion.RedAlertPlus.Resource
             var configs = await Task.WhenAll(_configFiles.Select(LoadConfigFile));
             var frameAnimationImages = new FrameAnimationImageResourceMap(WrapMultiplySections(configs, o => o.FrameAnimationImages));
             var themeAudios = new InputStreamWithContentTypeResourceMap(WrapMultiplySections(configs, o => o.ThemeAudios));
+            var shaders = new InputStreamWithContentTypeResourceMap(WrapMultiplySections(configs, o => o.Shaders));
 
-            await Task.WhenAll(frameAnimationImages.LoadAsync(), themeAudios.LoadAsync());
+            await Task.WhenAll(frameAnimationImages.LoadAsync(), themeAudios.LoadAsync(), shaders.LoadAsync());
 
             FrameAnimationImages = frameAnimationImages;
             ThemeAudios = themeAudios;
+            Shaders = shaders;
         }
 
         private async Task<ResourceConfig> LoadConfigFile(Uri uri)

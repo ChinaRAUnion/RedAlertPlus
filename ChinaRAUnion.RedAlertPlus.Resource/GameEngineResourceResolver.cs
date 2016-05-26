@@ -18,7 +18,7 @@ namespace ChinaRAUnion.RedAlertPlus.Resource
 
         public IRandomAccessStream ResolveShader(string name)
         {
-            throw new NotImplementedException();
+            return _resourceManager.Shaders.FindResource(name)?.Value;
         }
 
         public IRandomAccessStreamWithContentType ResolveTexture(string name)

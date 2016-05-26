@@ -1,0 +1,14 @@
+﻿{
+  "Shaders": [
+    {
+      "name": "TileLayerVS",
+      "source": "ms-appx:///Assets/Shaders/TileLayerVS.cso",
+      "contentType": "application/cso"
+    },
+    {
+      "name": "TileLayerPS",
+      "source": "ms-appx:///Assets/Shaders/TileLayerPS.cso",
+      "contentType": "application/cso"
+    }
+  ]
+}

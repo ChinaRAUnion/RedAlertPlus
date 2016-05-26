@@ -12,8 +12,8 @@ using namespace WRL;
 
 namespace
 {
-	constexpr wchar_t TileLayerVSName[] = L"TileLayerVS.cso";
-	constexpr wchar_t TileLayerPSName[] = L"TileLayerPS.cso";
+	constexpr wchar_t TileLayerVSName[] = L"TileLayerVS";
+	constexpr wchar_t TileLayerPSName[] = L"TileLayerPS";
 }
 
 MapRenderer::MapRenderer(DeviceContext & deviceContext)
@@ -48,8 +48,9 @@ concurrency::task<void> MapRenderer::CreateDeviceDependentResources(IResourceRes
 		ThrowIfFailed(d3dDevice->CreateRootSignature(0, pSignature->GetBufferPointer(), pSignature->GetBufferSize(), IID_PPV_ARGS(&_rootSignature)));
 	}
 
+	ComPtr<IResourceResovler> resourceResovlerHolder(resourceResolver);
 	std::array<concurrency::task<std::vector<byte>>, 2> VsPsTasks{ 
-		resourceResolver->ResovleShader(TileLayerVSName), resourceResolver->ResovleShader(TileLayerPSName) };
+		resourceResovlerHolder->ResovleShader(TileLayerVSName), resourceResovlerHolder->ResovleShader(TileLayerPSName) };
 	co_await concurrency::when_all(VsPsTasks.begin(), VsPsTasks.end());
 	auto vs = VsPsTasks[0].get();
 	auto ps = VsPsTasks[1].get();
@@ -60,7 +61,7 @@ concurrency::task<void> MapRenderer::CreateDeviceDependentResources(IResourceRes
 		{ "COLOR", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 12, D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0 },
 	};
 
-	D3D12_GRAPHICS_PIPELINE_STATE_DESC state = {};
+	D3D12_GRAPHICS_PIPELINE_STATE_DESC state {};
 	state.InputLayout = { inputLayout, _countof(inputLayout) };
 	state.pRootSignature = _rootSignature.Get();
 	state.VS = CD3DX12_SHADER_BYTECODE(vs.data(), vs.size());
@@ -76,4 +77,79 @@ concurrency::task<void> MapRenderer::CreateDeviceDependentResources(IResourceRes
 	state.SampleDesc.Count = 1;
 
 	ThrowIfFailed(d3dDevice->CreateGraphicsPipelineState(&state, IID_PPV_ARGS(&_pipelineState)));
+}
+
+
+// 用于向顶点着色器发送 MVP 矩阵的常量缓冲区。
+struct ModelViewProjectionConstantBuffer
+{
+	DirectX::XMFLOAT4X4 model;
+	DirectX::XMFLOAT4X4 view;
+	DirectX::XMFLOAT4X4 projection;
+};
+
+// 用于向顶点着色器发送每个顶点的数据。
+struct VertexPositionColor
+{
+	DirectX::XMFLOAT3 pos;
+	DirectX::XMFLOAT3 color;
+};
+
+using namespace DirectX;
+
+void MapRenderer::UploadGpuResource(std::vector<WRL::ComPtr<IUnknown>>& resourcesWaitForUpload)
+{
+	ComPtr<ID3D12GraphicsCommandList> commandList;
+	_deviceContext.CreateCommandList(0, D3D12_COMMAND_LIST_TYPE_DIRECT, _pipelineState.Get(), IID_PPV_ARGS(&commandList));
+
+	// 立方体顶点。每个顶点都有一个位置和一个颜色。
+	VertexPositionColor cubeVertices[] =
+	{
+		{ XMFLOAT3(-0.5f, -0.5f, -0.5f), XMFLOAT3(0.0f, 0.0f, 0.0f) },
+		{ XMFLOAT3(-0.5f, -0.5f,  0.5f), XMFLOAT3(0.0f, 0.0f, 1.0f) },
+		{ XMFLOAT3(-0.5f,  0.5f, -0.5f), XMFLOAT3(0.0f, 1.0f, 0.0f) },
+		{ XMFLOAT3(-0.5f,  0.5f,  0.5f), XMFLOAT3(0.0f, 1.0f, 1.0f) },
+		{ XMFLOAT3(0.5f, -0.5f, -0.5f), XMFLOAT3(1.0f, 0.0f, 0.0f) },
+		{ XMFLOAT3(0.5f, -0.5f,  0.5f), XMFLOAT3(1.0f, 0.0f, 1.0f) },
+		{ XMFLOAT3(0.5f,  0.5f, -0.5f), XMFLOAT3(1.0f, 1.0f, 0.0f) },
+		{ XMFLOAT3(0.5f,  0.5f,  0.5f), XMFLOAT3(1.0f, 1.0f, 1.0f) },
+	};
+
+	auto d3dDevice = _deviceContext.D3DDevice;
+	const UINT vertexBufferSize = sizeof(cubeVertices);
+	// 在 GPU 的默认堆中创建顶点缓冲区资源并使用上载堆将顶点数据复制到其中。
+	// 在 GPU 使用完之前，不得释放上载资源。
+	Microsoft::WRL::ComPtr<ID3D12Resource> vertexBufferUpload;
+
+	CD3DX12_HEAP_PROPERTIES defaultHeapProperties(D3D12_HEAP_TYPE_DEFAULT);
+	CD3DX12_RESOURCE_DESC vertexBufferDesc = CD3DX12_RESOURCE_DESC::Buffer(vertexBufferSize);
+	ThrowIfFailed(d3dDevice->CreateCommittedResource(
+		&defaultHeapProperties,
+		D3D12_HEAP_FLAG_NONE,
+		&vertexBufferDesc,
+		D3D12_RESOURCE_STATE_COPY_DEST,
+		nullptr,
+		IID_PPV_ARGS(&_vertexBuffer)));
+
+	CD3DX12_HEAP_PROPERTIES uploadHeapProperties(D3D12_HEAP_TYPE_UPLOAD);
+	ThrowIfFailed(d3dDevice->CreateCommittedResource(
+		&uploadHeapProperties,
+		D3D12_HEAP_FLAG_NONE,
+		&vertexBufferDesc,
+		D3D12_RESOURCE_STATE_GENERIC_READ,
+		nullptr,
+		IID_PPV_ARGS(&vertexBufferUpload)));
+	// 将顶点缓冲区上载到 GPU。
+	{
+		D3D12_SUBRESOURCE_DATA vertexData = {};
+		vertexData.pData = reinterpret_cast<BYTE*>(cubeVertices);
+		vertexData.RowPitch = vertexBufferSize;
+		vertexData.SlicePitch = vertexData.RowPitch;
+
+		UpdateSubresources(commandList.Get(), _vertexBuffer.Get(), vertexBufferUpload.Get(), 0, 0, 1, &vertexData);
+
+		CD3DX12_RESOURCE_BARRIER vertexBufferResourceBarrier =
+			CD3DX12_RESOURCE_BARRIER::Transition(_vertexBuffer.Get(), D3D12_RESOURCE_STATE_COPY_DEST, D3D12_RESOURCE_STATE_VERTEX_AND_CONSTANT_BUFFER);
+		commandList->ResourceBarrier(1, &vertexBufferResourceBarrier);
+	}
 }

@@ -31,7 +31,8 @@ namespace ChinaRAUnion.RedAlertPlus.Shell.ViewModels
 
         private void NavigateToMainMenu()
         {
-            _navigationService.For<MainMenuLayoutViewModel>().Navigate();
+            //_navigationService.For<MainMenuLayoutViewModel>().Navigate();
+            _navigationService.For<Areas.BattleControl.ViewModels.BattleControlViewModel>().Navigate();
         }
 
         private async Task LoadResources()

@@ -17,6 +17,8 @@ public:
 
 	void SetSwapChainChangedHandler(std::function<void(IDXGISwapChain*)> handler);
 	void UpdateDisplayMetrics(float logicalWidth, float logicalHeight, DXGI_MODE_ROTATION rotation, float compositionScaleX, float compositionScaleY, float dpi);
+	void CreateCommandList(UINT nodeMask, D3D12_COMMAND_LIST_TYPE type, ID3D12PipelineState* pInitialState, REFIID riid, void** ppCommandList);
+	void WaitForGpu();
 
 	ID3D12Device* get_D3DDevice() const noexcept { return _d3dDevice.Get(); }
 	DEFINE_PROPERTY_GET(D3DDevice, ID3D12Device*);
@@ -31,11 +33,12 @@ private:
 	void CreateDeviceResoures();
 	void CreateWindowSizeDependentResources();
 
-	void WaitForGpu();
 	void UpdateOutputSize();
 	void OnSwapChainChanged(IDXGISwapChain* swapChain);
 
 	UINT64& CurrentFence() { return _fenceValues.at(_currentFrame); }
+	ID3D12CommandAllocator* get_CurrentCommandAllocator() const noexcept { return _commandAllocators[_currentFrame].Get(); }
+	DEFINE_PROPERTY_GET(CurrentCommandAllocator, ID3D12CommandAllocator*);
 private:
 	static constexpr UINT FrameCount = 3;		// ÈýÖØ»º³å
 	DXGI_FORMAT _backBufferFormat = DXGI_FORMAT_B8G8R8A8_UNORM;

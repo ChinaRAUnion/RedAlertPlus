@@ -21,6 +21,7 @@ namespace ChinaRAUnion.RedAlertPlus.Shell.Areas.BattleControl.ViewModels
         public void SetupSwapChainPanel(object sender, RoutedEventArgs e)
         {
             _gameEngine.SetSwapChainPanel((SwapChainPanel)sender);
+            //_gameEngine.InitializeAsync();
         }
     }
 }

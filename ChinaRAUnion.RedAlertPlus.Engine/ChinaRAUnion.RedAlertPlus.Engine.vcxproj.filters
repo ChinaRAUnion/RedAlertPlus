@@ -58,6 +58,9 @@
       <Filter>头文件\Map</Filter>
     </ClInclude>
     <ClInclude Include="resource.h" />
+    <ClInclude Include="IDeviceDependentResourcesContainer.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

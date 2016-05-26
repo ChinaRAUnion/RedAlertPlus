@@ -102,7 +102,6 @@ void DeviceContext::UpdateDisplayMetrics(float logicalWidth, float logicalHeight
 	}
 }
 
-
 void DeviceContext::CreateDeviceIndependentResources()
 {
 
@@ -263,6 +262,8 @@ void DeviceContext::CreateWindowSizeDependentResources()
 		dsvDesc.ViewDimension = D3D12_DSV_DIMENSION_TEXTURE2D;
 		dsvDesc.Flags = D3D12_DSV_FLAG_NONE;
 
+		auto handle1 = _dsvDescHeap->GetCPUDescriptorHandleForHeapStart();
+		auto handle2 = _dsvDescHeap->GetGPUDescriptorHandleForHeapStart();
 		_d3dDevice->CreateDepthStencilView(_depthStencil.Get(), &dsvDesc, _dsvDescHeap->GetCPUDescriptorHandleForHeapStart());
 	}
 	// 设置用于确定整个窗口的 3D 渲染视区。
@@ -297,4 +298,9 @@ void DeviceContext::OnSwapChainChanged(IDXGISwapChain * swapChain)
 {
 	if (_swapChainChangedHandler)
 		_swapChainChangedHandler(swapChain);
+}
+
+void DeviceContext::CreateCommandList(UINT nodeMask, D3D12_COMMAND_LIST_TYPE type, ID3D12PipelineState * pInitialState, REFIID riid, void** ppCommandList)
+{
+	ThrowIfFailed(_d3dDevice->CreateCommandList(nodeMask, type, CurrentCommandAllocator, pInitialState, riid, ppCommandList));
 }

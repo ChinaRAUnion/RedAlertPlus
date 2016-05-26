@@ -14,6 +14,7 @@ namespace ChinaRAUnion.RedAlertPlus.Resource.Models
     {
         public FrameAnimationImageResource[] FrameAnimationImages { get; set; }
         public InputStreamWithContentTypeResource[] ThemeAudios { get; set; }
+        public InputStreamWithContentTypeResource[] Shaders { get; set; }
     }
 
     class FrameAnimationImageResourceMap : ResourceMap<FrameAnimationImageResource, CanvasBitmap>

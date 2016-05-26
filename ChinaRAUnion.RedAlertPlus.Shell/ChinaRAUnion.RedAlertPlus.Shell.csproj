@@ -93,6 +93,7 @@
     <Content Include="Assets\Config\UIArt.json" />
     <Content Include="Assets\Config\UIAudio.json" />
     <Content Include="Assets\Audio\drok.ogg" />
+    <Content Include="Assets\Config\Shaders.json" />
     <None Include="project.json" />
     <PRIResource Include="Strings\zh-Hans\Resources.resw" />
     <PRIResource Include="Strings\en\Resources.resw" />
@@ -219,10 +220,12 @@
       <Name>ChinaRAUnion.RedAlertPlus.Resource</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">
     <VisualStudioVersion>14.0</VisualStudioVersion>
   </PropertyGroup>
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\WindowsXaml\v$(VisualStudioVersion)\Microsoft.Windows.UI.Xaml.CSharp.targets" />
+  <Import Project="$(SolutionDir)ChinaRAUnion.RedAlertPlus.Assets\ChinaRAUnion.RedAlertPlus.Assets.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

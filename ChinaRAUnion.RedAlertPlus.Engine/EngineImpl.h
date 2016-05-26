@@ -7,6 +7,7 @@
 #pragma once
 #include "../../include/engine/Engine.h"
 #include "DeviceContext.h"
+#include <Map/MapRenderer.h>
 
 DEFINE_NS_ENGINE
 
@@ -17,9 +18,11 @@ public:
 
 	virtual void SetSwapChainChangedHandler(std::function<void(IDXGISwapChain*)> handler);
 	virtual void UpdateDisplayMetrics(float logicalWidth, float logicalHeight, DXGI_MODE_ROTATION rotation, float compositionScaleX, float compositionScaleY, float dpi);
+	virtual concurrency::task<void> InitializeAsync();
 private:
 	WRL::ComPtr<IResourceResovler> _resourceResolver;
 	DeviceContext _deviceContext;
+	std::unique_ptr<MapRenderer> _mapRender;
 };
 
 END_NS_ENGINE

@@ -35,6 +35,7 @@ interface DECLSPEC_UUID("DDDF5DA6-E458-4894-ACFC-5045A30676F7") IEngine : public
 {
 	virtual void SetSwapChainChangedHandler(std::function<void(IDXGISwapChain*)> handler) = 0;
 	virtual void UpdateDisplayMetrics(float logicalWidth, float logicalHeight, DXGI_MODE_ROTATION rotation, float compositionScaleX, float compositionScaleY, float dpi) = 0;
+	virtual concurrency::task<void> InitializeAsync() = 0;
 };
 
 
