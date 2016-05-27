@@ -102,6 +102,11 @@ void DeviceContext::UpdateDisplayMetrics(float logicalWidth, float logicalHeight
 	}
 }
 
+void DeviceContext::ExecuteCommandList(ID3D12CommandList * commandList)
+{
+	_commandQueue->ExecuteCommandLists(1, &commandList);
+}
+
 void DeviceContext::CreateDeviceIndependentResources()
 {
 
@@ -153,17 +158,17 @@ void DeviceContext::CreateDeviceResoures()
 
 	// 为 DSV 创建描述符堆。
 	D3D12_DESCRIPTOR_HEAP_DESC dsvHeapDesc{};
-	rtvHeapDesc.NumDescriptors = 1;
-	rtvHeapDesc.Type = D3D12_DESCRIPTOR_HEAP_TYPE_DSV;
-	rtvHeapDesc.Flags = D3D12_DESCRIPTOR_HEAP_FLAG_NONE;
+	dsvHeapDesc.NumDescriptors = 1;
+	dsvHeapDesc.Type = D3D12_DESCRIPTOR_HEAP_TYPE_DSV;
+	dsvHeapDesc.Flags = D3D12_DESCRIPTOR_HEAP_FLAG_NONE;
 	ThrowIfFailed(_d3dDevice->CreateDescriptorHeap(&dsvHeapDesc, IID_PPV_ARGS(&_dsvDescHeap)));
 
 	std::for_each(_commandAllocators.begin(), _commandAllocators.end(), [&](auto& allocator)
-	{ _d3dDevice->CreateCommandAllocator(D3D12_COMMAND_LIST_TYPE_DIRECT, IID_PPV_ARGS(&allocator)); });
+	{ ThrowIfFailed(_d3dDevice->CreateCommandAllocator(D3D12_COMMAND_LIST_TYPE_DIRECT, IID_PPV_ARGS(&allocator))); });
 	// 创建同步对象。
 	ThrowIfFailed(_d3dDevice->CreateFence(CurrentFence(), D3D12_FENCE_FLAG_NONE, IID_PPV_ARGS(&_fence)));
 	CurrentFence()++;
-	_fenceEvent.Attach(CreateEventEx(nullptr, nullptr, FALSE, EVENT_ALL_ACCESS));
+	_fenceEvent.Attach(CreateEventEx(nullptr, FALSE, FALSE, EVENT_ALL_ACCESS));
 }
 
 void DeviceContext::CreateWindowSizeDependentResources()
@@ -215,7 +220,7 @@ void DeviceContext::CreateWindowSizeDependentResources()
 		swapChainDesc.SampleDesc.Quality = 0;
 		swapChainDesc.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;
 		swapChainDesc.BufferCount = FrameCount;					    // 使用三重缓冲最大程度地减小延迟。
-		swapChainDesc.SwapEffect = DXGI_SWAP_EFFECT_FLIP_DISCARD;	// 所有 Windows 通用应用都必须使用 _FLIP_ SwapEffects。
+		swapChainDesc.SwapEffect = DXGI_SWAP_EFFECT_FLIP_SEQUENTIAL;	// 所有 Windows 通用应用都必须使用 _FLIP_ SwapEffects。
 		swapChainDesc.Flags = 0;
 		swapChainDesc.Scaling = scaling;
 		swapChainDesc.AlphaMode = DXGI_ALPHA_MODE_IGNORE;
@@ -262,8 +267,6 @@ void DeviceContext::CreateWindowSizeDependentResources()
 		dsvDesc.ViewDimension = D3D12_DSV_DIMENSION_TEXTURE2D;
 		dsvDesc.Flags = D3D12_DSV_FLAG_NONE;
 
-		auto handle1 = _dsvDescHeap->GetCPUDescriptorHandleForHeapStart();
-		auto handle2 = _dsvDescHeap->GetGPUDescriptorHandleForHeapStart();
 		_d3dDevice->CreateDepthStencilView(_depthStencil.Get(), &dsvDesc, _dsvDescHeap->GetCPUDescriptorHandleForHeapStart());
 	}
 	// 设置用于确定整个窗口的 3D 渲染视区。
@@ -303,4 +306,46 @@ void DeviceContext::OnSwapChainChanged(IDXGISwapChain * swapChain)
 void DeviceContext::CreateCommandList(UINT nodeMask, D3D12_COMMAND_LIST_TYPE type, ID3D12PipelineState * pInitialState, REFIID riid, void** ppCommandList)
 {
 	ThrowIfFailed(_d3dDevice->CreateCommandList(nodeMask, type, CurrentCommandAllocator, pInitialState, riid, ppCommandList));
+}
+
+// 准备呈现下一帧。
+void DeviceContext::MoveToNextFrame()
+{
+	// 在队列中安排信号命令。
+	const auto currentFenceValue = CurrentFence();
+	ThrowIfFailed(_commandQueue->Signal(_fence.Get(), currentFenceValue));
+
+	// 提高帧索引。
+	_currentFrame = _swapChain->GetCurrentBackBufferIndex();
+
+	// 检查下一帧是否准备好启动。
+	if (_fence->GetCompletedValue() < CurrentFence())
+	{
+		ThrowIfFailed(_fence->SetEventOnCompletion(CurrentFence(), _fenceEvent.Get()));
+		WaitForSingleObjectEx(_fenceEvent.Get(), INFINITE, FALSE);
+	}
+
+	// 为下一帧设置围栏值。
+	CurrentFence() = currentFenceValue + 1;
+}
+
+void DeviceContext::Present()
+{
+	// 第一个参数指示 DXGI 进行阻止直到 VSync，这使应用程序
+	// 在下一个 VSync 前进入休眠。这将确保我们不会浪费任何周期渲染
+	// 从不会在屏幕上显示的帧。
+	HRESULT hr = _swapChain->Present(1, 0);
+
+	// 如果通过断开连接或升级驱动程序移除了设备，则必须
+	// 必须重新创建所有设备资源。
+	if (hr == DXGI_ERROR_DEVICE_REMOVED || hr == DXGI_ERROR_DEVICE_RESET)
+	{
+		_deviceRemoved = true;
+	}
+	else
+	{
+		ThrowIfFailed(hr);
+
+		MoveToNextFrame();
+	}
 }

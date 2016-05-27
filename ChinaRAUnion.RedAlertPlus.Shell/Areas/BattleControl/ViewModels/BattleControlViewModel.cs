@@ -18,10 +18,11 @@ namespace ChinaRAUnion.RedAlertPlus.Shell.Areas.BattleControl.ViewModels
             _gameEngine = new GameEngine(resourceResolver);
         }
 
-        public void SetupSwapChainPanel(object sender, RoutedEventArgs e)
+        public async void SetupSwapChainPanel(object sender, RoutedEventArgs e)
         {
             _gameEngine.SetSwapChainPanel((SwapChainPanel)sender);
-            //_gameEngine.InitializeAsync();
+            await _gameEngine.InitializeAsync();
+            _gameEngine.StartRenderLoop();
         }
     }
 }

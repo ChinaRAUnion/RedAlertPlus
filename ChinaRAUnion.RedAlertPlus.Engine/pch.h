@@ -11,8 +11,10 @@
 
 #include <dxgi1_4.h>
 #include <d3d12.h>
-#include <collection.h>
 #include <ppltasks.h>
 #include <pplawait.h>
 #include "../include/d3dx12.h"
 #include <DirectXMath.h>
+#include <DirectXColors.h>
+#include <array>
+#include <pix_win.h>

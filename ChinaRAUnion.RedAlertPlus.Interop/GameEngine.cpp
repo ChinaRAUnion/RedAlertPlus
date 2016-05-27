@@ -14,6 +14,8 @@ using namespace Windows::UI::Core;
 using namespace Windows::Graphics::Display;
 using namespace Windows::Storage;
 using namespace Windows::Storage::Streams;
+using namespace Windows::Foundation;
+using namespace Windows::System::Threading;
 
 namespace
 {
@@ -161,6 +163,22 @@ void GameEngine::SetSwapChainPanel(Windows::UI::Xaml::Controls::SwapChainPanel ^
 Windows::Foundation::IAsyncAction ^ GameEngine::InitializeAsync()
 {
 	return concurrency::create_async([this] {return _engine->InitializeAsync(); });
+}
+
+void GameEngine::StartRenderLoop()
+{
+	// 创建一个将在后台线程上运行的任务。
+	auto workItemHandler = ref new WorkItemHandler([this](IAsyncAction ^ action)
+	{
+		// 计算更新的帧并且在每个场消隐期呈现一次。
+		while (action->Status == AsyncStatus::Started)
+		{
+			_engine->Render();
+		}
+	});
+
+	// 在高优先级的专用后台线程上运行任务。
+	ThreadPool::RunAsync(workItemHandler, WorkItemPriority::High, WorkItemOptions::TimeSliced);
 }
 
 void GameEngine::UpdateDisplayMetrices()

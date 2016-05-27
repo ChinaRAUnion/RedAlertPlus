@@ -19,10 +19,15 @@ public:
 	virtual void SetSwapChainChangedHandler(std::function<void(IDXGISwapChain*)> handler);
 	virtual void UpdateDisplayMetrics(float logicalWidth, float logicalHeight, DXGI_MODE_ROTATION rotation, float compositionScaleX, float compositionScaleY, float dpi);
 	virtual concurrency::task<void> InitializeAsync();
+	virtual void Render();
+private:
+	concurrency::task<void> CreateWindowSizeDependentResources();
 private:
 	WRL::ComPtr<IResourceResovler> _resourceResolver;
 	DeviceContext _deviceContext;
 	std::unique_ptr<MapRenderer> _mapRender;
+	std::vector<IDeviceDependentResourcesContainer*> _resourceContainers;
+	std::vector<IRenderable*> _renderables;
 };
 
 END_NS_ENGINE

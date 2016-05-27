@@ -14,6 +14,7 @@ DEFINE_NS_ENGINE
 interface IDeviceDependentResourcesContainer
 {
 	virtual concurrency::task<void> CreateDeviceDependentResources(IResourceResovler* resourceResolver) = 0;
+	virtual concurrency::task<void> CreateWindowSizeDependentResources(IResourceResovler* resourceResolver) = 0;
 	virtual void UploadGpuResource(std::vector<WRL::ComPtr<IUnknown>>& resourcesWaitForUpload) = 0;
 };
 

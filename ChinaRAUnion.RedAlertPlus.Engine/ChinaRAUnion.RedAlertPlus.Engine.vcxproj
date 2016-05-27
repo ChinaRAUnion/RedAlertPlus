@@ -237,13 +237,16 @@
     <ClInclude Include="DeviceContext.h" />
     <ClInclude Include="EngineImpl.h" />
     <ClInclude Include="IDeviceDependentResourcesContainer.h" />
+    <ClInclude Include="IRenderable.h" />
     <ClInclude Include="Map\MapRenderer.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="targetver.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="DeviceContext.cpp" />
+    <ClCompile Include="DeviceContext.cpp">
+      <AssemblerOutput Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">AssemblyAndSourceCode</AssemblerOutput>
+    </ClCompile>
     <ClCompile Include="dllmain.cpp" />
     <ClCompile Include="EngineImpl.cpp" />
     <ClCompile Include="Map\MapRenderer.cpp" />

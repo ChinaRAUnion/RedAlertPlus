@@ -43,6 +43,7 @@ public:
 
 	void SetSwapChainPanel(Windows::UI::Xaml::Controls::SwapChainPanel^ panel);
 	Windows::Foundation::IAsyncAction^ InitializeAsync();
+	void StartRenderLoop();
 private:
 	void UpdateDisplayMetrices();
 	void OnSizeChanged(Platform::Object ^sender, Windows::UI::Xaml::SizeChangedEventArgs ^e);

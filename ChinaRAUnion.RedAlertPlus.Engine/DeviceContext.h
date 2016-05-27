@@ -7,6 +7,7 @@
 #pragma once
 #include "../include/engine/Engine.h"
 #include <d3d12.h>
+#include <array>
 
 DEFINE_NS_ENGINE
 
@@ -28,6 +29,29 @@ public:
 
 	DXGI_FORMAT get_DepthBufferFormat() const noexcept { return _depthBufferFormat; }
 	DEFINE_PROPERTY_GET(DepthBufferFormat, DXGI_FORMAT);
+
+	ID3D12CommandAllocator* get_CurrentCommandAllocator() const noexcept { return _commandAllocators[_currentFrame].Get(); }
+	DEFINE_PROPERTY_GET(CurrentCommandAllocator, ID3D12CommandAllocator*);
+
+	const D3D12_VIEWPORT& get_ScreenViewport() const noexcept { return _screenViewport; }
+	DEFINE_PROPERTY_GET(ScreenViewport, const D3D12_VIEWPORT&);
+
+	ID3D12Resource* get_RenderTarget() const noexcept { return _renderTargets.at(_currentFrame).Get(); }
+	DEFINE_PROPERTY_GET(RenderTarget, ID3D12Resource*);
+
+	CD3DX12_CPU_DESCRIPTOR_HANDLE get_RenderTargetView() const
+	{
+		return CD3DX12_CPU_DESCRIPTOR_HANDLE(_rtvDescHeap->GetCPUDescriptorHandleForHeapStart(), _currentFrame, _rtvDescHandleSize);
+	}
+	DEFINE_PROPERTY_GET(RenderTargetView, CD3DX12_CPU_DESCRIPTOR_HANDLE);
+	CD3DX12_CPU_DESCRIPTOR_HANDLE get_DepthStencilView() const
+	{
+		return CD3DX12_CPU_DESCRIPTOR_HANDLE(_dsvDescHeap->GetCPUDescriptorHandleForHeapStart());
+	}
+	DEFINE_PROPERTY_GET(DepthStencilView, CD3DX12_CPU_DESCRIPTOR_HANDLE);
+
+	void ExecuteCommandList(ID3D12CommandList* commandList);
+	void Present();
 private:
 	void CreateDeviceIndependentResources();
 	void CreateDeviceResoures();
@@ -35,10 +59,9 @@ private:
 
 	void UpdateOutputSize();
 	void OnSwapChainChanged(IDXGISwapChain* swapChain);
+	void MoveToNextFrame();
 
 	UINT64& CurrentFence() { return _fenceValues.at(_currentFrame); }
-	ID3D12CommandAllocator* get_CurrentCommandAllocator() const noexcept { return _commandAllocators[_currentFrame].Get(); }
-	DEFINE_PROPERTY_GET(CurrentCommandAllocator, ID3D12CommandAllocator*);
 private:
 	static constexpr UINT FrameCount = 3;		// ÈýÖØ»º³å
 	DXGI_FORMAT _backBufferFormat = DXGI_FORMAT_B8G8R8A8_UNORM;
