@@ -14,6 +14,8 @@ namespace ChinaRAUnion.RedAlertPlus.Resource
         IResourceMap<FrameAnimationImageResource, CanvasBitmap> FrameAnimationImages { get; }
         IResourceMap<InputStreamWithContentTypeResource, IRandomAccessStream> ThemeAudios { get; }
         IResourceMap<InputStreamWithContentTypeResource, IRandomAccessStream> Shaders { get; }
+        IResourceMap<InputStreamWithContentTypeResource, IRandomAccessStream> Maps { get; }
+        IResourceMap<InputStreamWithContentTypeResource, TileSetContent> TileSets { get; }
         Task InitializeAsync();
     }
 

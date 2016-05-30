@@ -17,6 +17,12 @@
     <Filter Include="源文件\Map">
       <UniqueIdentifier>{f4ebc04d-ea36-47e0-83b4-ff0cafe5ca9e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="头文件\Texture">
+      <UniqueIdentifier>{fdb6aee6-3d7d-4690-99b5-55fe1c3841bf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="源文件\Texture">
+      <UniqueIdentifier>{98b4b3d9-b4cf-4f1f-99a0-65b209506f82}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="dllmain.cpp">
@@ -33,6 +39,18 @@
     </ClCompile>
     <ClCompile Include="Map\MapRenderer.cpp">
       <Filter>源文件\Map</Filter>
+    </ClCompile>
+    <ClCompile Include="Map\Map.cpp">
+      <Filter>源文件\Map</Filter>
+    </ClCompile>
+    <ClCompile Include="Map\TerrainRender.cpp">
+      <Filter>源文件\Map</Filter>
+    </ClCompile>
+    <ClCompile Include="Map\MapInfo.cpp">
+      <Filter>源文件\Map</Filter>
+    </ClCompile>
+    <ClCompile Include="Texture\TextureManager.cpp">
+      <Filter>源文件\Texture</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -57,12 +75,29 @@
     <ClInclude Include="Map\MapRenderer.h">
       <Filter>头文件\Map</Filter>
     </ClInclude>
-    <ClInclude Include="resource.h" />
     <ClInclude Include="IDeviceDependentResourcesContainer.h">
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="IRenderable.h">
       <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Map\TerrainRender.h">
+      <Filter>头文件\Map</Filter>
+    </ClInclude>
+    <ClInclude Include="Map\Map.h">
+      <Filter>头文件\Map</Filter>
+    </ClInclude>
+    <ClInclude Include="Map\MapInfo.h">
+      <Filter>头文件\Map</Filter>
+    </ClInclude>
+    <ClInclude Include="resource.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Texture\TextureManager.h">
+      <Filter>头文件\Texture</Filter>
+    </ClInclude>
+    <ClInclude Include="Texture\Texture.h">
+      <Filter>头文件\Texture</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

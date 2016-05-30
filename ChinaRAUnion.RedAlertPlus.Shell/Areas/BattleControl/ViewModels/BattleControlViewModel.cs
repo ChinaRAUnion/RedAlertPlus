@@ -16,6 +16,7 @@ namespace ChinaRAUnion.RedAlertPlus.Shell.Areas.BattleControl.ViewModels
         public BattleControlViewModel(IGameEngineResourceResolver resourceResolver)
         {
             _gameEngine = new GameEngine(resourceResolver);
+            _gameEngine.UseMap("map1");
         }
 
         public async void SetupSwapChainPanel(object sender, RoutedEventArgs e)

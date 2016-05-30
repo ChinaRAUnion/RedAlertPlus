@@ -94,6 +94,9 @@
     <Content Include="Assets\Config\UIAudio.json" />
     <Content Include="Assets\Audio\drok.ogg" />
     <Content Include="Assets\Config\Shaders.json" />
+    <Content Include="Assets\Map\map1.json" />
+    <Content Include="Assets\Config\TileSets.json" />
+    <Content Include="Assets\Config\Maps.json" />
     <None Include="project.json" />
     <PRIResource Include="Strings\zh-Hans\Resources.resw" />
     <PRIResource Include="Strings\en\Resources.resw" />
@@ -157,6 +160,7 @@
     <Content Include="Assets\Art\sdwrntmp.png" />
     <Content Include="Assets\Art\Splash.png" />
     <Content Include="Assets\Art\spldbrl.png" />
+    <Content Include="Assets\Map\TileSet\urban.tts" />
     <Content Include="Properties\Default.rd.xml" />
     <Content Include="Assets\LockScreenLogo.scale-200.png" />
     <Content Include="Assets\SplashScreen.scale-200.png" />

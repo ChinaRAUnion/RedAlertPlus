@@ -16,6 +16,11 @@ namespace ChinaRAUnion.RedAlertPlus.Resource
             _resourceManager = resourceManager;
         }
 
+        public IRandomAccessStream ResolveMap(string name)
+        {
+            return _resourceManager.Maps.FindResource(name)?.Value;
+        }
+
         public IRandomAccessStream ResolveShader(string name)
         {
             return _resourceManager.Shaders.FindResource(name)?.Value;
@@ -28,16 +33,7 @@ namespace ChinaRAUnion.RedAlertPlus.Resource
 
         public ITileSetPackageContent ResolveTileSetPackageFile(string name)
         {
-            throw new NotImplementedException();
-        }
-
-        class TileSetPackageContent : ITileSetPackageContent
-        {
-            public IRandomAccessStream ExtraImage { get; set; }
-
-            public IRandomAccessStream Image { get; set; }
-
-            public IRandomAccessStream TileSet { get; set; }
+            return _resourceManager.TileSets.FindResource(name)?.Value;
         }
     }
 }

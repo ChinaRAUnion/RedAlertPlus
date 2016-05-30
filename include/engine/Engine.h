@@ -29,12 +29,15 @@ interface DECLSPEC_UUID("1B572D0E-8D92-4BE8-B71C-CD633D97134F") IResourceResovle
 	virtual concurrency::task<std::vector<byte>> ResovleShader(const std::wstring& name) = 0;
 	virtual concurrency::task<TileSetPackageContent> ResolveTileSetPackageFile(const std::wstring& name) = 0;
 	virtual concurrency::task<BlobWithContentType> ResolveTexture(const std::wstring& name) = 0;
+	virtual concurrency::task<std::wstring> ResolveMap(const std::wstring& name) = 0;
 };
 
 interface DECLSPEC_UUID("DDDF5DA6-E458-4894-ACFC-5045A30676F7") IEngine : public IUnknown
 {
 	virtual void SetSwapChainChangedHandler(std::function<void(IDXGISwapChain*)> handler) = 0;
 	virtual void UpdateDisplayMetrics(float logicalWidth, float logicalHeight, DXGI_MODE_ROTATION rotation, float compositionScaleX, float compositionScaleY, float dpi) = 0;
+
+	virtual void UseMap(const std::wstring& mapData) = 0;
 	virtual concurrency::task<void> InitializeAsync() = 0;
 	virtual void Render() = 0;
 };

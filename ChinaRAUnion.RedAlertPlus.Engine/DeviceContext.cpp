@@ -74,10 +74,13 @@ namespace
 DeviceContext::DeviceContext()
 	:_logger(ref new NS_CORE::Logger(DeviceContext::typeid->FullName)),
 	_rotation(DXGI_MODE_ROTATION_UNSPECIFIED),
-	_compositionScaleX(1.f), _compositionScaleY(1.f), _dpi(96.f)
+	_compositionScaleX(1.f), _compositionScaleY(1.f), _dpi(96.f),
+	_textureManager(*this)
 {
 	CreateDeviceIndependentResources();
 	CreateDeviceResoures();
+
+	_textureManager.Initialize();
 }
 
 void DeviceContext::SetSwapChainChangedHandler(std::function<void(IDXGISwapChain*)> handler)

@@ -8,6 +8,8 @@
 #include "DeviceContext.h"
 #include "IDeviceDependentResourcesContainer.h"
 #include "IRenderable.h"
+#include "TerrainRender.h"
+#include "MapInfo.h"
 
 DEFINE_NS_ENGINE
 
@@ -21,17 +23,11 @@ public:
 	virtual void UploadGpuResource(std::vector<WRL::ComPtr<IUnknown>>& resourcesWaitForUpload);
 	virtual void Update();
 	virtual void Render();
+
+	void SetMap(std::shared_ptr<MapInfo> mapInfo);
 private:
 	DeviceContext& _deviceContext;
-	WRL::ComPtr<ID3D12RootSignature> _rootSignature;
-	WRL::ComPtr<ID3D12PipelineState> _pipelineState;
-	WRL::ComPtr<ID3D12Resource> _vertexBuffer;
-	WRL::ComPtr<ID3D12Resource> _indexBuffer;
-	WRL::ComPtr<ID3D12GraphicsCommandList> _commandList;
-
-	D3D12_VERTEX_BUFFER_VIEW _vertexBufferView;
-	D3D12_INDEX_BUFFER_VIEW _indexBufferView;
-	D3D12_RECT _scissorRect;
+	TerrainRender _terrainRender;
 };
 
 END_NS_ENGINE

@@ -25,6 +25,10 @@ namespace ChinaRAUnion.RedAlertPlus.Resource
 
         public IResourceMap<InputStreamWithContentTypeResource, IRandomAccessStream> Shaders { get; private set; }
 
+        public IResourceMap<InputStreamWithContentTypeResource, IRandomAccessStream> Maps { get; private set; }
+
+        public IResourceMap<InputStreamWithContentTypeResource, TileSetContent> TileSets { get; private set; }
+
         private readonly Uri[] _configFiles;
         public ResourceManager(Uri[] configFiles)
         {
@@ -37,12 +41,16 @@ namespace ChinaRAUnion.RedAlertPlus.Resource
             var frameAnimationImages = new FrameAnimationImageResourceMap(WrapMultiplySections(configs, o => o.FrameAnimationImages));
             var themeAudios = new InputStreamWithContentTypeResourceMap(WrapMultiplySections(configs, o => o.ThemeAudios));
             var shaders = new InputStreamWithContentTypeResourceMap(WrapMultiplySections(configs, o => o.Shaders));
+            var maps = new InputStreamWithContentTypeResourceMap(WrapMultiplySections(configs, o => o.Maps));
+            var tileSets = new TileSetContentResourceMap(WrapMultiplySections(configs, o => o.TileSets));
 
-            await Task.WhenAll(frameAnimationImages.LoadAsync(), themeAudios.LoadAsync(), shaders.LoadAsync());
+            await Task.WhenAll(frameAnimationImages.LoadAsync(), themeAudios.LoadAsync(), shaders.LoadAsync(), maps.LoadAsync(), tileSets.LoadAsync());
 
             FrameAnimationImages = frameAnimationImages;
             ThemeAudios = themeAudios;
             Shaders = shaders;
+            Maps = maps;
+            TileSets = tileSets;
         }
 
         private async Task<ResourceConfig> LoadConfigFile(Uri uri)

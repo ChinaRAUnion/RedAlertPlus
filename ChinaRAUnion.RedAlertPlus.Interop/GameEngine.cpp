@@ -7,6 +7,7 @@
 #include "pch.h"
 #include "GameEngine.h"
 #include <windows.ui.xaml.media.dxinterop.h>
+#include <sstream>
 
 using namespace NS_RAP;
 using namespace WRL;
@@ -101,6 +102,12 @@ namespace
 			auto res = _resourceResovler->ResolveTexture(Platform::StringReference(name.c_str(), name.length()));
 			return{ co_await ReadStream(res), std::wstring(res->ContentType->Begin(), res->ContentType->End()) };
 		}
+
+		virtual concurrency::task<std::wstring> ResolveMap(const std::wstring& name)
+		{
+			auto res = _resourceResovler->ResolveMap(Platform::StringReference(name.c_str(), name.length()));
+			return ReadString(res);
+		}
 	private:
 		Concurrency::task<std::vector<byte>> ReadStream(IRandomAccessStream^ stream)
 		{
@@ -111,12 +118,46 @@ namespace
 			return std::move(data);
 		}
 
+		Concurrency::task<std::vector<byte>> ReadStream(IInputStream^ stream)
+		{
+			auto dataReader = ref new DataReader(stream);
+			std::vector<byte> data;
+			while (true)
+			{
+				auto len = co_await concurrency::create_task(dataReader->LoadAsync(64 * 1024));
+				if (len == 0)break;
+				auto oldLen = data.size();
+				data.resize(oldLen + len);
+				dataReader->ReadBytes(Platform::ArrayReference<byte>(data.data() + oldLen, len));
+			}
+			return std::move(data);
+		}
+
 		Concurrency::task<std::wstring> ReadString(IRandomAccessStream^ stream)
 		{
 			auto dataReader = ref new DataReader(stream);
 			auto len = co_await concurrency::create_task(dataReader->LoadAsync(stream->Size));
 			auto str = dataReader->ReadString(len);
+			if(str->Length() && *str->Begin() == 0x0000FEFFu)
+				return std::wstring(str->Begin() + 1, str->End());
 			return std::wstring(str->Begin(), str->End());
+		}
+
+		Concurrency::task<std::wstring> ReadString(IInputStream^ stream)
+		{
+			auto dataReader = ref new DataReader(stream);
+			std::wstringstream ss;
+			while (true)
+			{
+				auto len = co_await concurrency::create_task(dataReader->LoadAsync(64 * 1024));
+				if (len == 0)break;
+				auto str = dataReader->ReadString(len);
+				if (str->Length() && *str->Begin() == 0x0000FEFFu)
+					ss << std::wstring(str->Begin() + 1, str->End());
+				else
+					ss << std::wstring(str->Begin(), str->End());
+			}
+			return ss.str();
 		}
 	private:
 		IGameEngineResourceResolver^ _resourceResovler;
@@ -158,6 +199,11 @@ void GameEngine::SetSwapChainPanel(Windows::UI::Xaml::Controls::SwapChainPanel ^
 	_onSizeChangedRegToken = panel->SizeChanged += ref new Windows::UI::Xaml::SizeChangedEventHandler(this, &GameEngine::OnSizeChanged);
 	_onCompositionScaleChangedRegToken = panel->CompositionScaleChanged += ref new Windows::Foundation::TypedEventHandler<Windows::UI::Xaml::Controls::SwapChainPanel ^, Platform::Object ^>(this, &GameEngine::OnCompositionScaleChanged);
 	UpdateDisplayMetrices();
+}
+
+void GameEngine::UseMap(Platform::String ^ mapName)
+{
+	_engine->UseMap({ mapName->Begin(), mapName->End() });
 }
 
 Windows::Foundation::IAsyncAction ^ GameEngine::InitializeAsync()

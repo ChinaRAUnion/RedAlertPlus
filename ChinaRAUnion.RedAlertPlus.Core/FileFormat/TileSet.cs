@@ -228,5 +228,10 @@ namespace ChinaRAUnion.RedAlertPlus.FileFormat
         public TileSet()
         {
         }
+
+        
+        public const string TileSetJsonFileName = "tileSet.json";
+        public const string ImageFileName = "image.dds";
+        public const string ExtraImageFileName = "extraImage.dds";
     }
 }

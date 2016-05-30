@@ -110,6 +110,7 @@
     <Compile Include="GameEngineResourceResolver.cs" />
     <Compile Include="Models\FrameAnimationImageResourceMap.cs" />
     <Compile Include="Models\InputStreamWithContentTypeResourceMap.cs" />
+    <Compile Include="Models\TileSetContentResourceMap.cs" />
     <Compile Include="ResourceBind.cs" />
     <Compile Include="ResourceManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

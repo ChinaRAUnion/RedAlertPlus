@@ -41,14 +41,22 @@ void Engine::UpdateDisplayMetrics(float logicalWidth, float logicalHeight, DXGI_
 	CreateWindowSizeDependentResources();
 }
 
+void Engine::UseMap(const std::wstring& mapName)
+{
+	if (_map)
+	{
+		_resourceContainers.erase(std::find(_resourceContainers.begin(), _resourceContainers.end(), _map.get()));
+		_renderables.erase(std::find(_renderables.begin(), _renderables.end(), _map.get()));
+	}
+	_map = std::make_unique<Map>(_deviceContext, mapName);
+	_resourceContainers.emplace_back(_map.get());
+	_renderables.emplace_back(_map.get());
+}
+
 concurrency::task<void> Engine::InitializeAsync()
 {
-	if (!_mapRender)
-	{
-		_mapRender = std::make_unique<MapRenderer>(_deviceContext);
-		_resourceContainers.emplace_back(_mapRender.get());
-		_renderables.emplace_back(_mapRender.get());
-	}
+	if (_map) co_await _map->InitializeAsync(_resourceResolver.Get());
+
 	for (auto&& container : _resourceContainers)
 		co_await container->CreateDeviceDependentResources(_resourceResolver.Get());
 

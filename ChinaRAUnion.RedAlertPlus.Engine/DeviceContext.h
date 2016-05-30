@@ -8,6 +8,7 @@
 #include "../include/engine/Engine.h"
 #include <d3d12.h>
 #include <array>
+#include "Texture/TextureManager.h"
 
 DEFINE_NS_ENGINE
 
@@ -50,6 +51,9 @@ public:
 	}
 	DEFINE_PROPERTY_GET(DepthStencilView, CD3DX12_CPU_DESCRIPTOR_HANDLE);
 
+	TextureManager& get_TextureManager() noexcept { return _textureManager; }
+	DEFINE_PROPERTY_GET(TextureManager, TextureManager&);
+
 	void ExecuteCommandList(ID3D12CommandList* commandList);
 	void Present();
 private:
@@ -85,6 +89,7 @@ private:
 	WRL::ComPtr<ID3D12Fence> _fence;
 	WRL::ComPtr<IDXGISwapChain3> _swapChain;
 	D3D12_VIEWPORT _screenViewport;
+	::NS_ENGINE::TextureManager _textureManager;
 
 	size_t _currentFrame = 0;
 	WRL::Wrappers::Event _fenceEvent;

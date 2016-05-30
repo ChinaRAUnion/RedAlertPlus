@@ -12,19 +12,19 @@ DEFINE_NS_RAP
 
 public interface class ITileSetPackageContent
 {
-	property Windows::Storage::Streams::IRandomAccessStream^ TileSet
+	property Windows::Storage::Streams::IInputStream^ TileSet
 	{
-		Windows::Storage::Streams::IRandomAccessStream^ get();
+		Windows::Storage::Streams::IInputStream^ get();
 	}
 
-	property Windows::Storage::Streams::IRandomAccessStream^ Image
+	property Windows::Storage::Streams::IInputStream^ Image
 	{
-		Windows::Storage::Streams::IRandomAccessStream^ get();
+		Windows::Storage::Streams::IInputStream^ get();
 	}
 
-	property Windows::Storage::Streams::IRandomAccessStream^ ExtraImage
+	property Windows::Storage::Streams::IInputStream^ ExtraImage
 	{
-		Windows::Storage::Streams::IRandomAccessStream^ get();
+		Windows::Storage::Streams::IInputStream^ get();
 	}
 };
 
@@ -33,6 +33,7 @@ public interface class IGameEngineResourceResolver
 	Windows::Storage::Streams::IRandomAccessStream^ ResolveShader(Platform::String^ name);
 	ITileSetPackageContent^ ResolveTileSetPackageFile(Platform::String^ name);
 	Windows::Storage::Streams::IRandomAccessStreamWithContentType^ ResolveTexture(Platform::String^ name);
+	Windows::Storage::Streams::IRandomAccessStream^ ResolveMap(Platform::String^ name);
 };
 
 [Windows::Foundation::Metadata::WebHostHiddenAttribute]
@@ -42,6 +43,8 @@ public:
 	GameEngine(IGameEngineResourceResolver^ resourceResovler);
 
 	void SetSwapChainPanel(Windows::UI::Xaml::Controls::SwapChainPanel^ panel);
+
+	void UseMap(Platform::String^ mapName);
 	Windows::Foundation::IAsyncAction^ InitializeAsync();
 	void StartRenderLoop();
 private:

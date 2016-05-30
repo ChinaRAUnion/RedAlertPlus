@@ -18,3 +18,4 @@
 #include <DirectXColors.h>
 #include <array>
 #include <pix_win.h>
+#include <wincodec.h>
