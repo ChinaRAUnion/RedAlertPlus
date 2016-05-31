@@ -6,16 +6,22 @@
 //
 #include "pch.h"
 #include "MapInfo.h"
+#include <rapidjson/document.h>
 
 using namespace NS_ENGINE;
 using namespace WRL;
+using namespace rapidjson;
 
-MapInfo::MapInfo(const rapidjson::GenericDocument<rapidjson::UTF16<>>& document)
-	:width(document[L"width"].GetUint()),
-	height(document[L"height"].GetUint()),
-	tileSet(document[L"tileSet"].GetString()),
-	tiles(height)
+MapInfo::MapInfo(const std::wstring& json)
 {
+	GenericDocument<UTF16<>> document;
+	document.Parse(json);
+	width = document[L"width"].GetUint();
+	height = document[L"height"].GetUint();
+	tileSet = document[L"tileSet"].GetString();
+
+	tiles.resize(height);
+
 	auto rowIt = tiles.begin();
 	for (auto&& rowData : document[L"tiles"].GetArray())
 	{
@@ -23,7 +29,8 @@ MapInfo::MapInfo(const rapidjson::GenericDocument<rapidjson::UTF16<>>& document)
 		auto columnIt = rowIt->begin();
 		for (auto&& columnData : rowData.GetArray())
 		{
-			*columnIt = columnData.GetUint();
+			auto&& pair = columnData.GetArray();
+			*columnIt = std::make_pair(pair[0].GetUint(), pair[1].GetUint());
 			++columnIt;
 		}
 		++rowIt;

@@ -9,7 +9,6 @@
 
 using namespace NS_ENGINE;
 using namespace WRL;
-using namespace rapidjson;
 
 Map::Map(DeviceContext& deviceContext, const std::wstring & mapName)
 	:_mapRender(deviceContext), _mapName(mapName)
@@ -19,9 +18,7 @@ Map::Map(DeviceContext& deviceContext, const std::wstring & mapName)
 concurrency::task<void> Map::InitializeAsync(IResourceResovler * resourceResolver)
 {
 	auto mapData = co_await resourceResolver->ResolveMap(_mapName);
-	GenericDocument<UTF16<>> document;
-	document.Parse(mapData);
-	_mapInfo = std::make_shared<MapInfo>(document);
+	_mapInfo = std::make_shared<MapInfo>(mapData);
 
 	_mapRender.SetMap(_mapInfo);
 }

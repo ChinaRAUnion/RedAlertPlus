@@ -23,6 +23,9 @@
     <Filter Include="源文件\Texture">
       <UniqueIdentifier>{98b4b3d9-b4cf-4f1f-99a0-65b209506f82}</UniqueIdentifier>
     </Filter>
+    <Filter Include="头文件\Math">
+      <UniqueIdentifier>{ec13c6a5-2c54-4989-99c2-b6cee143e389}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="dllmain.cpp">
@@ -51,6 +54,9 @@
     </ClCompile>
     <ClCompile Include="Texture\TextureManager.cpp">
       <Filter>源文件\Texture</Filter>
+    </ClCompile>
+    <ClCompile Include="Map\TileSetInfo.cpp">
+      <Filter>源文件\Map</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -98,6 +104,12 @@
     </ClInclude>
     <ClInclude Include="Texture\Texture.h">
       <Filter>头文件\Texture</Filter>
+    </ClInclude>
+    <ClInclude Include="Math\Collision.h">
+      <Filter>头文件\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="Map\TileSetInfo.h">
+      <Filter>头文件\Map</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

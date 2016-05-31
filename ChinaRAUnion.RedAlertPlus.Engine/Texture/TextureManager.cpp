@@ -139,7 +139,7 @@ Texture TextureManager::CreateTexture2D(const byte * data, size_t size, const st
 	auto handle = AllocateHandle();
 	d3dDevice->CreateShaderResourceView(texture.Get(), nullptr, handle);
 
-	Texture result(texture.Get(), handle);
+	Texture result(texture.Get(), handle, width, height);
 	result.dataForUpload = std::make_unique<DataToUpload>(std::move(toUpload));
 	return result;
 }

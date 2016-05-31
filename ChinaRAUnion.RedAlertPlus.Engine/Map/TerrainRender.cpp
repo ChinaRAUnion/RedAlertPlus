@@ -6,6 +6,7 @@
 //
 #include "pch.h"
 #include "TerrainRender.h"
+#include <DirectXCollision.h>
 
 using namespace NS_ENGINE;
 using namespace WRL;
@@ -84,6 +85,10 @@ concurrency::task<void> TerrainRender::CreateDeviceDependentResources(IResourceR
 	auto tileSetRes = co_await resourceResolver->ResolveTileSetPackageFile(_mapInfo->tileSet);
 	_tileSetImageTex = _deviceContext.TextureManager.CreateTexture2D(tileSetRes.Image.data(), tileSetRes.Image.size(), L"image/png");
 	_tileSetExtraImageTex = _deviceContext.TextureManager.CreateTexture2D(tileSetRes.ExtraImage.data(), tileSetRes.ExtraImage.size(), L"image/png");
+
+	_tileSetInfo = std::make_unique<TileSetInfo>(tileSetRes.TileSet, _tileSetImageTex.Width, _tileSetImageTex.Height,
+		_tileSetExtraImageTex.Width, _tileSetExtraImageTex.Height);
+	CreateTerrainTree();
 }
 
 concurrency::task<void> TerrainRender::CreateWindowSizeDependentResources(IResourceResovler * resourceResolver)
@@ -293,4 +298,55 @@ void TerrainRender::Render()
 void TerrainRender::SetMap(std::shared_ptr<MapInfo> mapInfo)
 {
 	_mapInfo = std::move(mapInfo);
+}
+
+namespace
+{
+	uint32_t CalcMapHeight(uint32_t rows, uint32_t tileHeight)
+	{
+		if (!rows) return 0;
+		return rows % 2 ? (rows / 2 + 1) * tileHeight : (rows / 2) * tileHeight + tileHeight / 2;
+	}
+}
+
+void TerrainRender::CreateTerrainTree()
+{
+	const auto tileWidth = _tileSetInfo->TileWidth;
+	const auto tileHeight = _tileSetInfo->TileHeight;
+	const auto heightShift = tileHeight / 2;
+	const auto widthShift = tileWidth / 2;
+
+	_terrainTree.BoundingRect = { 0, float(CalcMapHeight(_mapInfo->height, tileHeight)), float(_mapInfo->width * tileWidth + widthShift), 0 };
+
+	bool evenRow = true;
+	uint32_t cntY = 0;
+	for (auto&& row : _mapInfo->tiles)
+	{
+		uint32_t cntX = evenRow ? widthShift : 0;
+		for (auto&& cell : row)
+		{
+			const auto heightedY = cntY + heightShift * cell.second;
+			auto& tile = _tileSetInfo->FindTile(cell.first);
+			TileObject obj;
+			obj.ImageSource = ImageSourceKind::Image;
+			obj.ProjectedRect = tile.Rect.MakeOffset(cntX, heightedY);
+			obj.LeftTopUV = tile.LeftTopUV;
+			obj.RightBottomUV = tile.RightBottomUV;
+			_terrainTree.Add(obj, obj.ProjectedRect);
+
+			const auto extra = tile.ExtraImg;
+			if (extra)
+			{
+				TileObject extObj;
+				extObj.ImageSource = ImageSourceKind::ExtraImage;
+				extObj.ProjectedRect = extra->Rect.MakeOffset(tile.ExtraImgOffset).MakeOffset(cntX, heightedY);
+				extObj.LeftTopUV = extra->LeftTopUV;
+				extObj.RightBottomUV = extra->RightBottomUV;
+				_terrainTree.Add(extObj, extObj.ProjectedRect);
+			}
+			cntX += widthShift;
+		}
+		cntY += tileHeight;
+		evenRow = !evenRow;
+	}
 }

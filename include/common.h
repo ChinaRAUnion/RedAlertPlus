@@ -5,6 +5,7 @@
 // 创建时间：2016-05-24
 //
 #pragma once
+#define NOMINMAX
 
 #define DEFINE_NS_CORE namespace Tomato { namespace Core {
 #define END_NS_CORE }}
@@ -35,6 +36,7 @@
 #endif
 
 #define DEFINE_PROPERTY_GET(name, type) __declspec(property(get = get_##name)) type name
+#define DEFINE_PROPERTY(name, type) __declspec(property(get = get_##name, put = set_##name)) type name
 #define ARGUMENT_NOTNULL_HR(pointer) if(!(pointer)) return E_POINTER
 
 #include <functional>
