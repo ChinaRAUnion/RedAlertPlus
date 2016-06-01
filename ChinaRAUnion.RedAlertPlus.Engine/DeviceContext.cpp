@@ -112,7 +112,23 @@ void DeviceContext::ExecuteCommandList(ID3D12CommandList * commandList)
 
 void DeviceContext::CreateDeviceIndependentResources()
 {
-
+	static const size_t width = 100, height = 200;
+	std::stringstream ss;
+	for (size_t i = 0; i < height; i++)
+	{
+		ss << "[";
+		for (size_t j = 0; j < width; j++)
+		{
+			ss << "[ " << rand() % 8 << ", 0 ]";
+			if (j != width - 1)
+				ss << ",";
+		}
+		ss << "]";
+		if (i != height - 1)
+			ss << ",";
+	}
+	auto m = ss.str();
+	m.data();
 }
 
 void DeviceContext::CreateDeviceResoures()

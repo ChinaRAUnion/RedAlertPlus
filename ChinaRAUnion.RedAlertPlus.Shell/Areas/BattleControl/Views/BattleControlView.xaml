@@ -7,7 +7,14 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d">
 
-    <Grid Background="Black">
+    <Grid Background="Black" Loaded="{x:Bind ViewModel.OnLoaded}" PointerMoved="{x:Bind ViewModel.OnPointerMoved}">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="Auto"/>
+        </Grid.ColumnDefinitions>
         <SwapChainPanel Loaded="{x:Bind ViewModel.SetupSwapChainPanel}"/>
+        <Grid Grid.Column="1" Width="100">
+            
+        </Grid>
     </Grid>
 </Page>

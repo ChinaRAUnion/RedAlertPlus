@@ -126,20 +126,28 @@ Texture TextureManager::CreateTexture2D(const byte * data, size_t size, const st
 		textureData.RowPitch = rowPitch;
 		textureData.SlicePitch = imageSize;
 
+		const UINT64 uploadBufferSize = GetRequiredIntermediateSize(texture.Get(), 0, 1);
+
 		CD3DX12_HEAP_PROPERTIES uploadHeapProperties(D3D12_HEAP_TYPE_UPLOAD);
 		ThrowIfFailed(d3dDevice->CreateCommittedResource(
 			&uploadHeapProperties,
 			D3D12_HEAP_FLAG_NONE,
-			&CD3DX12_RESOURCE_DESC::Buffer(imageSize),
+			&CD3DX12_RESOURCE_DESC::Buffer(uploadBufferSize),
 			D3D12_RESOURCE_STATE_GENERIC_READ,
 			nullptr,
 			IID_PPV_ARGS(&toUpload.resForUpload)));
 	}
 
 	auto handle = AllocateHandle();
-	d3dDevice->CreateShaderResourceView(texture.Get(), nullptr, handle);
+	// Describe and create a SRV for the texture.
+	D3D12_SHADER_RESOURCE_VIEW_DESC srvDesc = {};
+	srvDesc.Shader4ComponentMapping = D3D12_DEFAULT_SHADER_4_COMPONENT_MAPPING;
+	srvDesc.Format = textureDesc.Format;
+	srvDesc.ViewDimension = D3D12_SRV_DIMENSION_TEXTURE2D;
+	srvDesc.Texture2D.MipLevels = 1;
+	d3dDevice->CreateShaderResourceView(texture.Get(), &srvDesc, handle.first);
 
-	Texture result(texture.Get(), handle, width, height);
+	Texture result(texture.Get(), handle.first, handle.second, width, height);
 	result.dataForUpload = std::make_unique<DataToUpload>(std::move(toUpload));
 	return result;
 }
@@ -173,8 +181,10 @@ size_t TextureManager::BitsPerPixel(WICPixelFormatGUID & guid)
 	return bpp;
 }
 
-D3D12_CPU_DESCRIPTOR_HANDLE TextureManager::AllocateHandle()
+std::pair<D3D12_CPU_DESCRIPTOR_HANDLE, D3D12_GPU_DESCRIPTOR_HANDLE> TextureManager::AllocateHandle()
 {
 	auto offset = _nextAvailOffset++;
-	return CD3DX12_CPU_DESCRIPTOR_HANDLE(_srvDescHeap->GetCPUDescriptorHandleForHeapStart(), offset, _srvDescHandleSize);
+	return std::make_pair<D3D12_CPU_DESCRIPTOR_HANDLE, D3D12_GPU_DESCRIPTOR_HANDLE>(
+		CD3DX12_CPU_DESCRIPTOR_HANDLE(_srvDescHeap->GetCPUDescriptorHandleForHeapStart(), offset, _srvDescHandleSize),
+		CD3DX12_GPU_DESCRIPTOR_HANDLE(_srvDescHeap->GetGPUDescriptorHandleForHeapStart(), offset, _srvDescHandleSize));
 }

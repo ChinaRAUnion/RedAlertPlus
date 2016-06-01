@@ -120,6 +120,7 @@
     <Compile Include="Primitives\TileSetContent.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Resource\IResourceManager.cs" />
+    <Compile Include="Services\IInputService.cs" />
     <Compile Include="Services\IThemeService.cs" />
     <EmbeddedResource Include="Properties\ChinaRAUnion.RedAlertPlus.Core.rd.xml" />
   </ItemGroup>

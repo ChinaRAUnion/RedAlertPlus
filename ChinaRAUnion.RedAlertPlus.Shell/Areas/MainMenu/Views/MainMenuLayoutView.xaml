@@ -9,7 +9,7 @@
     xmlns:res="using:ChinaRAUnion.RedAlertPlus.Resource"
     mc:Ignorable="d">
 
-    <Grid Background="Black">
+    <Grid Background="Black" Loaded="{x:Bind ViewModel.OnLoaded}">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*"/>
             <ColumnDefinition Width="Auto"/>

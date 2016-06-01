@@ -25,9 +25,10 @@ public:
 
 	Texture CreateTexture2D(const byte* data, size_t size, const std::wstring& contentType);
 	void Upload(Texture& texture, ID3D12GraphicsCommandList* commandList, std::vector<WRL::ComPtr<IUnknown>>& resourcesWaitForUpload);
+	ID3D12DescriptorHeap* GetHeap() const noexcept { return _srvDescHeap.Get(); }
 private:
 	size_t BitsPerPixel(WICPixelFormatGUID& guid);
-	D3D12_CPU_DESCRIPTOR_HANDLE AllocateHandle();
+	std::pair<D3D12_CPU_DESCRIPTOR_HANDLE, D3D12_GPU_DESCRIPTOR_HANDLE> AllocateHandle();
 private:
 	DeviceContext& _deviceContext;
 	WRL::ComPtr<IWICImagingFactory> _wicFactory;

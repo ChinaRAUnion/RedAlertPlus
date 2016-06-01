@@ -230,7 +230,7 @@ void GameEngine::StartRenderLoop()
 void GameEngine::UpdateDisplayMetrices()
 {
 	if (_swapChainPanel)
-		_engine->UpdateDisplayMetrics(float(_swapChainPanel->ActualWidth), float(_swapChainPanel->ActualWidth), ComputeDisplayRotation(_displayInfo),
+		_engine->UpdateDisplayMetrics(float(_swapChainPanel->ActualWidth), float(_swapChainPanel->ActualHeight), ComputeDisplayRotation(_displayInfo),
 			_swapChainPanel->CompositionScaleX, _swapChainPanel->CompositionScaleY, _displayInfo->LogicalDpi);
 }
 

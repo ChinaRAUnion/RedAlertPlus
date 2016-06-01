@@ -1,4 +1,6 @@
 ﻿using Caliburn.Micro;
+using ChinaRAUnion.RedAlertPlus.Services;
+using ChinaRAUnion.RedAlertPlus.Shell.Services;
 using ChinaRAUnion.RedAlertPlus.Shell.ViewModels;
 using System;
 using System.Collections.Generic;
@@ -13,6 +15,7 @@ namespace ChinaRAUnion.RedAlertPlus
     {
         public static void UseShell(this SimpleContainer container)
         {
+            container.Singleton<IInputService, InputService>();
             container.Singleton<MainViewModel>();
             container.Singleton<SplashViewModel>();
             container.Singleton<Shell.Areas.MainMenu.ViewModels.MainMenuLayoutViewModel>();

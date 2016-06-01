@@ -1,5 +1,6 @@
 ﻿using Caliburn.Micro;
 using ChinaRAUnion.RedAlertPlus.Resource;
+using ChinaRAUnion.RedAlertPlus.Services;
 using ChinaRAUnion.RedAlertPlus.Shell.Areas.MainMenu.ViewModels;
 using System;
 using System.Collections.Generic;
@@ -25,6 +26,8 @@ namespace ChinaRAUnion.RedAlertPlus.Shell.ViewModels
 
         public async void OnLoaded()
         {
+            IoC.Get<IInputService>().SetCursor(CursorType.None);
+
             await LoadResources();
             NavigateToMainMenu();
         }

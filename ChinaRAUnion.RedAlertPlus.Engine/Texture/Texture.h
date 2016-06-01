@@ -21,17 +21,20 @@ class Texture
 {
 public:
 	Texture()
-		:_handle({ 0 }) {}
-	Texture(ID3D12Resource* resource, D3D12_CPU_DESCRIPTOR_HANDLE handle, UINT width, UINT height)
-		:_resource(resource), _handle(handle), _width(width), _height(height) {}
+		:_cpuHandle({ 0 }) {}
+	Texture(ID3D12Resource* resource, D3D12_CPU_DESCRIPTOR_HANDLE cpuHandle, D3D12_GPU_DESCRIPTOR_HANDLE gpuHandle, UINT width, UINT height)
+		:_resource(resource), _cpuHandle(cpuHandle), _gpuHandle(gpuHandle), _width(width), _height(height) {}
 
-	const D3D12_CPU_DESCRIPTOR_HANDLE& get_Handle() const noexcept { return _handle; }
-	DEFINE_PROPERTY_GET(Handle, const D3D12_CPU_DESCRIPTOR_HANDLE&);
+	const D3D12_CPU_DESCRIPTOR_HANDLE& get_CPUHandle() const noexcept { return _cpuHandle; }
+	DEFINE_PROPERTY_GET(CPUHandle, const D3D12_CPU_DESCRIPTOR_HANDLE&);
+
+	const D3D12_GPU_DESCRIPTOR_HANDLE& get_GPUHandle() const noexcept { return _gpuHandle; }
+	DEFINE_PROPERTY_GET(GPUHandle, const D3D12_GPU_DESCRIPTOR_HANDLE&);
 
 	ID3D12Resource* get_Resource() const noexcept { return _resource.Get(); }
 	DEFINE_PROPERTY_GET(Resource, ID3D12Resource*);
 
-	bool IsValid() const noexcept { return _handle.ptr != 0; }
+	bool IsValid() const noexcept { return _cpuHandle.ptr != 0; }
 
 	UINT get_Width() const noexcept { return _width; }
 	DEFINE_PROPERTY_GET(Width, UINT);
@@ -41,7 +44,8 @@ public:
 	std::unique_ptr<DataToUpload> dataForUpload;
 private:
 	WRL::ComPtr<ID3D12Resource> _resource;
-	D3D12_CPU_DESCRIPTOR_HANDLE _handle;
+	D3D12_CPU_DESCRIPTOR_HANDLE _cpuHandle;
+	D3D12_GPU_DESCRIPTOR_HANDLE _gpuHandle;
 	UINT _width, _height;
 };
 

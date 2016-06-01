@@ -11,6 +11,7 @@
 #include <vector>
 #include <deque>
 #include <memory>
+#include <ppltasks.h>
 
 namespace Tomato
 {
@@ -32,6 +33,17 @@ namespace Tomato
 				RightBottom.x >= other.RightBottom.x && RightBottom.y <= other.RightBottom.y;
 		}
 
+		bool Intersect(const Rect& other) const noexcept
+		{
+			auto distX = std::fabs(Center.x - other.Center.x);
+			auto distY = std::fabs(Center.y - other.Center.y);
+
+			return distX < (Width + other.Width) / 2 && distY < (Height + other.Height);
+		}
+
+		DirectX::XMFLOAT2 get_Center() const noexcept { return{ LeftTop.x + Width / 2, RightBottom.y + Height / 2 }; }
+		DEFINE_PROPERTY_GET(Center, DirectX::XMFLOAT2);
+
 		float get_Width() const noexcept { return RightBottom.x - LeftTop.x; }
 		void set_Width(float value) noexcept { RightBottom.x = LeftTop.x + value; }
 		DEFINE_PROPERTY(Width, float);
@@ -43,7 +55,7 @@ namespace Tomato
 		void Offset(float x, float y) noexcept
 		{
 			LeftTop.x += x; RightBottom.x += x;
-			LeftTop.y += x; RightBottom.y += y;
+			LeftTop.y += y; RightBottom.y += y;
 		}
 
 		Rect MakeOffset(float x, float y) const noexcept
@@ -94,11 +106,15 @@ namespace Tomato
 		std::unique_ptr<std::array<QuadTreeNode, 4>> Children;
 		size_t Level = 0;
 		TNodeManager NodeManager;
+		bool Sealed = false;
 
-		QuadTreeNode() {}
+		QuadTreeNode()
+		{
+			NodeManager.SetNode(*this);
+		}
 
 		QuadTreeNode(const Rect& boundingRect)
-			:BoundingRect(boundingRect)
+			:QuadTreeNode(), BoundingRect(boundingRect)
 		{
 
 		}
@@ -112,7 +128,7 @@ namespace Tomato
 
 		void Add(const T& obj, const Tomato::Rect& rect)
 		{
-			if (ContinueDivideFn()(BoundingRect, Level))
+			if (!Sealed && ContinueDivideFn()(BoundingRect, Level + 1))
 			{
 				InitializeRect();
 				for (auto&& child : *Children)
@@ -126,6 +142,33 @@ namespace Tomato
 			}
 			Objects.emplace_back(obj);
 		}
+
+		template<typename TFn>
+		void ForEach(TFn kernel)
+		{
+			kernel(*this);
+			if (Children)
+				for (auto&& child : *Children)
+					child.ForEach(std::forward<TFn>(kernel));
+		}
+
+		template<typename TFn>
+		concurrency::task<void> ForEachAsync(TFn kernel)
+		{
+			co_await kernel(*this);
+			if (Children)
+				for (auto&& child : *Children)
+					co_await child.ForEachAsync(std::forward<TFn>(kernel));
+		}
+
+		void HitTest(std::vector<QuadTreeNode*>& nodes, const Rect& rect)
+		{
+			if (BoundingRect.Intersect(rect))
+				nodes.emplace_back(this);
+			if (Children)
+				for (auto&& child : *Children)
+					child.HitTest(nodes, rect);
+		}
 	private:
 		void InitializeRect()
 		{
@@ -138,10 +181,11 @@ namespace Tomato
 				Children->at(2).BoundingRect = trunkRect.MakeOffset(trunkRect.Width, trunkRect.Height);
 				Children->at(3).BoundingRect = trunkRect.MakeOffset(0, trunkRect.Height);
 
-				Children->at(0).Level =
-					Children->at(1).Level =
-					Children->at(2).Level =
-					Children->at(3).Level = Level + 1;
+				for (auto&& child : *Children)
+				{
+					child.Level = Level + 1;
+					child.NodeManager.SetNode(child);
+				}
 			}
 		}
 	};

@@ -36,6 +36,11 @@ namespace ChinaRAUnion.RedAlertPlus.Shell.Areas.MainMenu.ViewModels
             _themeService = themeService;
         }
 
+        public void OnLoaded()
+        {
+            IoC.Get<IInputService>().SetCursor(CursorType.Normal);
+        }
+
         public void SetupContentFrame(object sender, RoutedEventArgs e)
         {
             _contentNavigator = new FrameAdapter((Frame)sender);
