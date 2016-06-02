@@ -11,14 +11,24 @@ using namespace NS_ENGINE;
 using namespace WRL;
 
 Map::Map(DeviceContext& deviceContext, const std::wstring & mapName)
-	:_mapRender(deviceContext), _mapName(mapName)
+	:_deviceContext(deviceContext), _mapRender(deviceContext), _mapName(mapName)
+{
+}
+
+Map::Map(DeviceContext & deviceContext, const MapGenerateOptions & options)
+	: _deviceContext(deviceContext), _mapRender(deviceContext), _mapGenOptions(options)
 {
 }
 
 concurrency::task<void> Map::InitializeAsync(IResourceResovler * resourceResolver)
 {
-	auto mapData = co_await resourceResolver->ResolveMap(_mapName);
-	_mapInfo = std::make_shared<MapInfo>(mapData);
+	if (!_mapName.empty())
+	{
+		auto mapData = co_await resourceResolver->ResolveMap(_mapName);
+		_mapInfo = std::make_shared<MapInfo>(mapData);
+	}
+	else
+		_mapInfo = std::make_shared<MapInfo>(co_await MapInfo::Generate(_deviceContext.TextureManager, _mapGenOptions, resourceResolver));
 
 	_mapRender.SetMap(_mapInfo);
 }

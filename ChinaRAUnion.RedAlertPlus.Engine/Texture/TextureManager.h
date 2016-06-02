@@ -23,6 +23,7 @@ public:
 
 	static const UINT HandlesPerHeap = 65536;
 
+	Texture GetTexutre2DInfo(const byte* data, size_t size, const std::wstring& contentType);
 	Texture CreateTexture2D(const byte* data, size_t size, const std::wstring& contentType);
 	void Upload(Texture& texture, ID3D12GraphicsCommandList* commandList, std::vector<WRL::ComPtr<IUnknown>>& resourcesWaitForUpload);
 	ID3D12DescriptorHeap* GetHeap() const noexcept { return _srvDescHeap.Get(); }

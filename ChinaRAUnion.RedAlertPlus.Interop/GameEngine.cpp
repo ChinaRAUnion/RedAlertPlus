@@ -111,7 +111,7 @@ namespace
 	private:
 		Concurrency::task<std::vector<byte>> ReadStream(IRandomAccessStream^ stream)
 		{
-			auto dataReader = ref new DataReader(stream);
+			auto dataReader = ref new DataReader(stream->CloneStream());
 			auto len = co_await concurrency::create_task(dataReader->LoadAsync(stream->Size));
 			std::vector<byte> data(len);
 			dataReader->ReadBytes(Platform::ArrayReference<byte>(data.data(), data.size()));
@@ -135,10 +135,10 @@ namespace
 
 		Concurrency::task<std::wstring> ReadString(IRandomAccessStream^ stream)
 		{
-			auto dataReader = ref new DataReader(stream);
+			auto dataReader = ref new DataReader(stream->CloneStream());
 			auto len = co_await concurrency::create_task(dataReader->LoadAsync(stream->Size));
 			auto str = dataReader->ReadString(len);
-			if(str->Length() && *str->Begin() == 0x0000FEFFu)
+			if (str->Length() && *str->Begin() == 0x0000FEFFu)
 				return std::wstring(str->Begin() + 1, str->End());
 			return std::wstring(str->Begin(), str->End());
 		}
@@ -206,6 +206,16 @@ void GameEngine::UseMap(Platform::String ^ mapName)
 	_engine->UseMap({ mapName->Begin(), mapName->End() });
 }
 
+void GameEngine::GenerateMap(GameMapGenerateOptions ^ options)
+{
+	_engine->GenerateMap(
+	{
+		options->Width,
+		options->Height,
+		std::wstring(options->TileSetName->Begin(), options->TileSetName->End())
+	});
+}
+
 Windows::Foundation::IAsyncAction ^ GameEngine::InitializeAsync()
 {
 	return concurrency::create_async([this] {return _engine->InitializeAsync(); });
@@ -219,6 +229,7 @@ void GameEngine::StartRenderLoop()
 		// 计算更新的帧并且在每个场消隐期呈现一次。
 		while (action->Status == AsyncStatus::Started)
 		{
+			std::unique_lock<std::mutex> locker(_deviceLock);
 			_engine->Render();
 		}
 	});
@@ -234,10 +245,10 @@ void GameEngine::OnPointerMoved(Windows::Foundation::Size uiSize, Windows::UI::I
 	{
 		static double slideFactor = 0.3, maxSlideSpped = 10;
 		const auto position = point->Position;
-		
+
 		auto leftMove = (position.X - _lastRBPressedPoint.X) * slideFactor;
 		auto topMove = -(position.Y - _lastRBPressedPoint.Y) * slideFactor;
-		_engine->SetMapScrollSpeed(leftMove < 0 ? std::max(-maxSlideSpped, leftMove) : std::min(maxSlideSpped, leftMove), 
+		_engine->SetMapScrollSpeed(leftMove < 0 ? std::max(-maxSlideSpped, leftMove) : std::min(maxSlideSpped, leftMove),
 			topMove < 0 ? std::max(-maxSlideSpped, topMove) : std::min(maxSlideSpped, topMove));
 	}
 	// 普通卷动
@@ -254,6 +265,8 @@ void GameEngine::OnPointerMoved(Windows::Foundation::Size uiSize, Windows::UI::I
 			auto bottomMove = uiSize.Height - position.Y < slideLength ? -slideSpeed : 0;
 			_engine->SetMapScrollSpeed(leftMove + rightMove, topMove + bottomMove);
 		}
+		else
+			_engine->SetMapScrollSpeed(0, 0);
 	}
 }
 
@@ -272,9 +285,12 @@ void GameEngine::OnPointerReleased(Windows::Foundation::Size uiSize, Windows::UI
 
 void GameEngine::UpdateDisplayMetrices()
 {
+	std::unique_lock<std::mutex> locker(_deviceLock);
 	if (_swapChainPanel)
+	{
 		_engine->UpdateDisplayMetrics(float(_swapChainPanel->ActualWidth), float(_swapChainPanel->ActualHeight), ComputeDisplayRotation(_displayInfo),
 			_swapChainPanel->CompositionScaleX, _swapChainPanel->CompositionScaleY, _displayInfo->LogicalDpi);
+	}
 }
 
 void GameEngine::OnSizeChanged(Platform::Object ^sender, Windows::UI::Xaml::SizeChangedEventArgs ^e)

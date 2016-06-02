@@ -42,6 +42,31 @@ public enum class GameMode
 	MapEdit
 };
 
+public ref class GameMapGenerateOptions sealed
+{
+public:
+	property uint32_t Width
+	{
+		uint32_t get() { return _width; }
+		void set(uint32_t value) { _width = value; }
+	}
+	
+	property uint32_t Height
+	{
+		uint32_t get() { return _height; }
+		void set(uint32_t value) { _height = value; }
+	}
+
+	property Platform::String^ TileSetName
+	{
+		Platform::String^ get() { return _tileSetName; }
+		void set(Platform::String^ value) { _tileSetName = value; }
+	}
+private:
+	uint32_t _width, _height;
+	Platform::String^ _tileSetName;
+};
+
 [Windows::Foundation::Metadata::WebHostHiddenAttribute]
 public ref class GameEngine sealed
 {
@@ -57,6 +82,7 @@ public:
 	void SetSwapChainPanel(Windows::UI::Xaml::Controls::SwapChainPanel^ panel);
 
 	void UseMap(Platform::String^ mapName);
+	void GenerateMap(GameMapGenerateOptions^ options);
 	Windows::Foundation::IAsyncAction^ InitializeAsync();
 	void StartRenderLoop();
 
@@ -77,6 +103,7 @@ private:
 	GameMode _gameMode = GameMode::Play;
 
 	Windows::Foundation::Point _lastRBPressedPoint;
+	std::mutex _deviceLock;
 };
 
 END_NS_RAP

@@ -24,6 +24,13 @@ struct BlobWithContentType
 	std::wstring ContentType;
 };
 
+struct MapGenerateOptions
+{
+	uint32_t width;
+	uint32_t height;
+	std::wstring tileSetName;
+};
+
 interface DECLSPEC_UUID("1B572D0E-8D92-4BE8-B71C-CD633D97134F") IResourceResovler : public IUnknown
 {
 	virtual concurrency::task<std::vector<byte>> ResovleShader(const std::wstring& name) = 0;
@@ -38,6 +45,7 @@ interface DECLSPEC_UUID("DDDF5DA6-E458-4894-ACFC-5045A30676F7") IEngine : public
 	virtual void UpdateDisplayMetrics(float logicalWidth, float logicalHeight, DXGI_MODE_ROTATION rotation, float compositionScaleX, float compositionScaleY, float dpi) = 0;
 
 	virtual void UseMap(const std::wstring& mapData) = 0;
+	virtual void GenerateMap(const MapGenerateOptions& options) = 0;
 	virtual concurrency::task<void> InitializeAsync() = 0;
 	virtual void Render() = 0;
 

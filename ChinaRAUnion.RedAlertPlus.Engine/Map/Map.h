@@ -17,6 +17,7 @@ class Map : public IDeviceDependentResourcesContainer, public IRenderable
 {
 public:
 	Map(DeviceContext& deviceContext, const std::wstring & mapName);
+	Map(DeviceContext& deviceContext, const MapGenerateOptions & options);
 
 	concurrency::task<void> InitializeAsync(IResourceResovler * resourceResolver);
 	virtual concurrency::task<void> CreateDeviceDependentResources(IResourceResovler* resourceResolver);
@@ -28,7 +29,9 @@ public:
 
 	void SetMapScrollSpeed(float x, float y);
 private:
+	DeviceContext& _deviceContext;
 	MapRenderer _mapRender;
+	MapGenerateOptions _mapGenOptions;
 	std::wstring _mapName;
 	std::shared_ptr<MapInfo> _mapInfo;
 	DirectX::XMFLOAT2 _mapScrollSpeed;

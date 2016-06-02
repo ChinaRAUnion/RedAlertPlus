@@ -53,6 +53,18 @@ void Engine::UseMap(const std::wstring& mapName)
 	_renderables.emplace_back(_map.get());
 }
 
+void Engine::GenerateMap(const MapGenerateOptions& options)
+{
+	if (_map)
+	{
+		_resourceContainers.erase(std::find(_resourceContainers.begin(), _resourceContainers.end(), _map.get()));
+		_renderables.erase(std::find(_renderables.begin(), _renderables.end(), _map.get()));
+	}
+	_map = std::make_unique<Map>(_deviceContext, options);
+	_resourceContainers.emplace_back(_map.get());
+	_renderables.emplace_back(_map.get());
+}
+
 concurrency::task<void> Engine::InitializeAsync()
 {
 	if (_map) co_await _map->InitializeAsync(_resourceResolver.Get());

@@ -62,6 +62,15 @@ TileSetInfo::TileSetInfo(const std::wstring & json, uint32_t imageWidth, uint32_
 			cntX = 0;
 		}
 	}
+
+	for (auto&& jPAU : document[L"pickanytileunits"].GetArray())
+	{
+		PickAnyUnit pau;
+		pau.Category = jPAU[L"category"].GetString();
+		for (auto&& tile : jPAU[L"tiles"].GetArray())
+			pau.Tiles.emplace_back(tile.GetUint());
+		_pickAnyUnits.emplace_back(pau);
+	}
 }
 
 const Tile & TileSetInfo::FindTile(uint32_t id) const
@@ -69,4 +78,11 @@ const Tile & TileSetInfo::FindTile(uint32_t id) const
 	if (_tiles.empty())
 		ThrowAlways(L"No tile found in tileset.");
 	return id < _tiles.size() ? _tiles[id] : _tiles.front();
+}
+
+const PickAnyUnit & TileSetInfo::FindPickAnyUnit(uint32_t id) const
+{
+	if (_pickAnyUnits.empty())
+		ThrowAlways(L"No pickanyunit found in tileset.");
+	return id < _pickAnyUnits.size() ? _pickAnyUnits[id] : _pickAnyUnits.front();
 }

@@ -78,6 +78,29 @@ void TextureManager::Initialize()
 	_srvDescHandleSize = d3dDevice->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
 }
 
+Texture TextureManager::GetTexutre2DInfo(const byte * data, size_t size, const std::wstring & contentType)
+{
+	if (contentType == L"image/dds")
+		ThrowAlways(L"DDS is not supported.");
+
+	ComPtr<IWICStream> stream;
+	ThrowIfFailed(_wicFactory->CreateStream(&stream));
+	ThrowIfFailed(stream->InitializeFromMemory(const_cast<byte*>(data), size));
+
+	ComPtr<IWICBitmapDecoder> decoder;
+	ThrowIfFailed(_wicFactory->CreateDecoderFromStream(stream.Get(), nullptr, WICDecodeMetadataCacheOnDemand, &decoder));
+	ComPtr<IWICBitmapFrameDecode> frame;
+	ThrowIfFailed(decoder->GetFrame(0, &frame));
+
+	UINT width, height;
+	ThrowIfFailed(frame->GetSize(&width, &height));
+	WICPixelFormatGUID wicFormat;
+	ThrowIfFailed(frame->GetPixelFormat(&wicFormat));
+	auto dxgiFormat = WICToDXGI(wicFormat);
+
+	return Texture{ nullptr, {}, {}, width, height };
+}
+
 Texture TextureManager::CreateTexture2D(const byte * data, size_t size, const std::wstring & contentType)
 {
 	if (contentType == L"image/dds")

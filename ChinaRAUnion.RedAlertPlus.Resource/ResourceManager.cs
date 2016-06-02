@@ -27,7 +27,7 @@ namespace ChinaRAUnion.RedAlertPlus.Resource
 
         public IResourceMap<InputStreamWithContentTypeResource, IRandomAccessStream> Maps { get; private set; }
 
-        public IResourceMap<InputStreamWithContentTypeResource, TileSetContent> TileSets { get; private set; }
+        public IResourceMap<InputStreamWithContentTypeResource, ITileSetPackageContent> TileSets { get; private set; }
 
         private readonly Uri[] _configFiles;
         public ResourceManager(Uri[] configFiles)

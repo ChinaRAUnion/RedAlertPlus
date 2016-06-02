@@ -25,12 +25,19 @@ struct Tile
 	DirectX::XMFLOAT2 ExtraImgOffset;
 };
 
+struct PickAnyUnit
+{
+	std::wstring Category;
+	std::vector<uint32_t> Tiles;
+};
+
 class TileSetInfo
 {
 public:
 	TileSetInfo(const std::wstring& json, uint32_t imageWidth, uint32_t imageHeight, uint32_t extraImageWidth, uint32_t extraImageHeight);
 
 	const Tile& FindTile(uint32_t id) const;
+	const PickAnyUnit& FindPickAnyUnit(uint32_t id) const;
 
 	uint32_t get_TileWidth() const noexcept { return _tileWidth; }
 	DEFINE_PROPERTY_GET(TileWidth, uint32_t);
@@ -40,6 +47,7 @@ private:
 	uint32_t _tileWidth, _tileHeight;
 	std::vector<ExtraImage> _extraImages;
 	std::vector<Tile> _tiles;
+	std::vector<PickAnyUnit> _pickAnyUnits;
 };
 
 END_NS_ENGINE

@@ -20,6 +20,7 @@ public:
 	virtual void UpdateDisplayMetrics(float logicalWidth, float logicalHeight, DXGI_MODE_ROTATION rotation, float compositionScaleX, float compositionScaleY, float dpi);
 
 	virtual void UseMap(const std::wstring& mapName);
+	virtual void GenerateMap(const MapGenerateOptions& options);
 	virtual concurrency::task<void> InitializeAsync();
 	virtual void Render();
 

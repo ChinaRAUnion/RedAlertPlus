@@ -1,0 +1,9 @@
+﻿<caliburn:CaliburnApplication
+    x:Class="ChinaRAUnion.RedAlertPlus.MapEditor.App"
+    xmlns:caliburn="using:Caliburn.Micro"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:ChinaRAUnion.RedAlertPlus.MapEditor"
+    RequestedTheme="Light">
+
+</caliburn:CaliburnApplication>

@@ -5,13 +5,17 @@
 // 创建时间：2016-05-30
 //
 #pragma once
-#include "../../include/engine/common.h"
+#include "../../include/engine/engine.h"
 
 DEFINE_NS_ENGINE
 
+class TextureManager;
+
 struct MapInfo
 {
+	MapInfo() {}
 	MapInfo(const std::wstring& json);
+	static concurrency::task<MapInfo> Generate(TextureManager& textureManager, const MapGenerateOptions & options, IResourceResovler * resourceResolver);
 
 	uint32_t width, height;
 	std::wstring tileSet;
