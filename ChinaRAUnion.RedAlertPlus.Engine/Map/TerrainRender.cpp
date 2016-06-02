@@ -51,7 +51,7 @@ concurrency::task<void> TerrainRender::CreateDeviceDependentResources(IResourceR
 	// 为常量缓冲区创建描述符堆。
 	{
 		D3D12_DESCRIPTOR_HEAP_DESC heapDesc = {};
-		heapDesc.NumDescriptors = 1;
+		heapDesc.NumDescriptors = DeviceContext::FrameCount;
 		heapDesc.Type = D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV;
 		// 此标志指示此描述符堆可以绑定到管道，并且其中包含的描述符可以由根表引用。
 		heapDesc.Flags = D3D12_DESCRIPTOR_HEAP_FLAG_SHADER_VISIBLE;
@@ -60,7 +60,7 @@ concurrency::task<void> TerrainRender::CreateDeviceDependentResources(IResourceR
 
 	CD3DX12_HEAP_PROPERTIES uploadHeapProperties(D3D12_HEAP_TYPE_UPLOAD);
 
-	CD3DX12_RESOURCE_DESC constantBufferDesc = CD3DX12_RESOURCE_DESC::Buffer(1 * c_alignedConstantBufferSize);
+	CD3DX12_RESOURCE_DESC constantBufferDesc = CD3DX12_RESOURCE_DESC::Buffer(DeviceContext::FrameCount * c_alignedConstantBufferSize);
 	ThrowIfFailed(d3dDevice->CreateCommittedResource(
 		&uploadHeapProperties,
 		D3D12_HEAP_FLAG_NONE,
@@ -74,14 +74,20 @@ concurrency::task<void> TerrainRender::CreateDeviceDependentResources(IResourceR
 	CD3DX12_CPU_DESCRIPTOR_HANDLE cbvCpuHandle(_cbvHeap->GetCPUDescriptorHandleForHeapStart());
 	_cbvDescriptorSize = d3dDevice->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
 
-	D3D12_CONSTANT_BUFFER_VIEW_DESC desc;
-	desc.BufferLocation = cbvGpuAddress;
-	desc.SizeInBytes = c_alignedConstantBufferSize;
-	d3dDevice->CreateConstantBufferView(&desc, cbvCpuHandle);
+	for (size_t i = 0; i < DeviceContext::FrameCount; i++)
+	{
+		D3D12_CONSTANT_BUFFER_VIEW_DESC desc;
+		desc.BufferLocation = cbvGpuAddress;
+		desc.SizeInBytes = c_alignedConstantBufferSize;
+		d3dDevice->CreateConstantBufferView(&desc, cbvCpuHandle);
+
+		cbvGpuAddress += desc.SizeInBytes;
+		cbvCpuHandle.Offset(_cbvDescriptorSize);
+	}
 	// 映射常量缓冲区。
 	CD3DX12_RANGE readRange(0, 0);		// 我们不打算从 CPU 上的此资源中进行读取。
 	ThrowIfFailed(_constantBuffer->Map(0, &readRange, reinterpret_cast<void**>(&_mappedConstantBuffer)));
-	ZeroMemory(_mappedConstantBuffer, 1 * c_alignedConstantBufferSize);
+	ZeroMemory(_mappedConstantBuffer, DeviceContext::FrameCount * c_alignedConstantBufferSize);
 
 	// 创建具有单个常量缓冲区槽的根签名。
 	{
@@ -90,7 +96,7 @@ concurrency::task<void> TerrainRender::CreateDeviceDependentResources(IResourceR
 		range[1].Init(D3D12_DESCRIPTOR_RANGE_TYPE_SRV, 1, 0);
 
 		CD3DX12_ROOT_PARAMETER rootParameters[2];
-		rootParameters[0].InitAsConstantBufferView(0, 0);
+		rootParameters[0].InitAsDescriptorTable(1, &range[0], D3D12_SHADER_VISIBILITY_VERTEX);
 		rootParameters[1].InitAsDescriptorTable(1, &range[1], D3D12_SHADER_VISIBILITY_ALL);
 
 		D3D12_ROOT_SIGNATURE_FLAGS rootSignatureFlags =
@@ -197,25 +203,26 @@ void TerrainRender::UploadGpuResource(std::vector<WRL::ComPtr<IUnknown>>& resour
 
 void TerrainRender::Update()
 {
-	const float left = 100.f, bottom = 100.f;
-
-	// 更新常量缓冲区资源。
-	UINT8* destination = _mappedConstantBuffer + (0 * c_alignedConstantBufferSize);
-	memcpy_s(destination, sizeof(_constantData), &_constantData, sizeof(_constantData));
+	const float left = _currentMargin.x, bottom = _currentMargin.y;
 
 	D3D12_VIEWPORT viewport = _deviceContext.ScreenViewport;
 
-	static const XMVECTORF32 eye = { left + viewport.Width / 2.f, bottom + viewport.Height / 2.f, 1.0f, 0.0f };
-	static const XMVECTORF32 at = { eye.f[0], eye.f[1], 0.0f, 0.0f };
-	static const XMVECTORF32 up = { 0.0f, 1.0f, 0.0f, 0.0f };
+	const XMVECTORF32 eye = { left + viewport.Width / 2.f, bottom + viewport.Height / 2.f, 1.0f, 0.0f };
+	const XMVECTORF32 at = { eye.f[0], eye.f[1], 0.0f, 0.0f };
+	const XMVECTORF32 up = { 0.0f, 1.0f, 0.0f, 0.0f };
 
 	XMStoreFloat4x4(&_constantData.view, XMMatrixTranspose(XMMatrixLookAtRH(eye, at, up)));
 
-	_currentViewRect = { left, left + viewport.Height, bottom + viewport.Width, bottom };
+	_currentViewRect = { left, bottom + viewport.Height, left + viewport.Width, bottom };
+
+	// 更新常量缓冲区资源。
+	UINT8* destination = _mappedConstantBuffer + (_deviceContext.CurrentFrameIndex * c_alignedConstantBufferSize);
+	memcpy_s(destination, sizeof(_constantData), &_constantData, sizeof(_constantData));
 }
 
 void TerrainRender::Render()
 {
+	ThrowIfFailed(_deviceContext.CurrentCommandAllocator->Reset());
 	ThrowIfFailed(_commandList->Reset(_deviceContext.CurrentCommandAllocator, _pipelineState.Get()));
 	PIXBeginEvent(_commandList.Get(), 0, L"Draw the cube");
 	{
@@ -227,13 +234,12 @@ void TerrainRender::Render()
 		auto& viewport = _deviceContext.ScreenViewport;
 		_commandList->RSSetViewports(1, &viewport);
 		_commandList->RSSetScissorRects(1, &_scissorRect);
-		_commandList->SetDescriptorHeaps(1, _cbvHeap.GetAddressOf());
-		_commandList->SetDescriptorHeaps(1, descHeaps);
 
+		_commandList->SetDescriptorHeaps(1, _cbvHeap.GetAddressOf());
 		// 将当前帧的常量缓冲区绑定到管道。
-		CD3DX12_GPU_DESCRIPTOR_HANDLE gpuHandle(_cbvHeap->GetGPUDescriptorHandleForHeapStart(), 0, _cbvDescriptorSize);
-		//_commandList->SetGraphicsRootDescriptorTable(0, gpuHandle);
-		_commandList->SetGraphicsRootConstantBufferView(0, _constantBuffer->GetGPUVirtualAddress());
+		CD3DX12_GPU_DESCRIPTOR_HANDLE gpuHandle(_cbvHeap->GetGPUDescriptorHandleForHeapStart(), _deviceContext.CurrentFrameIndex, _cbvDescriptorSize);
+		_commandList->SetGraphicsRootDescriptorTable(0, gpuHandle);
+		//_commandList->SetGraphicsRootConstantBufferView(0, gpuHandle);
 
 		// 指示此资源会用作呈现目标。
 		CD3DX12_RESOURCE_BARRIER renderTargetResourceBarrier =
@@ -249,6 +255,7 @@ void TerrainRender::Render()
 		_commandList->OMSetRenderTargets(1, &renderTargetView, false, &depthStencilView);
 
 		_commandList->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+		_commandList->SetDescriptorHeaps(1, descHeaps);
 		_commandList->SetGraphicsRootDescriptorTable(1, _tileSetImageTex.GPUHandle);
 
 		std::vector<TerrianNode_t*> nodes;
@@ -326,6 +333,18 @@ void TerrainRender::CreateTerrainTree()
 		node.NodeManager.SetTexture(_tileSetImageTex, _tileSetExtraImageTex);
 		node.Sealed = true;
 	});
+}
+
+DirectX::XMFLOAT2 TerrainRender::SetMapMargin(const DirectX::XMFLOAT2 & margin)
+{
+	auto viewport = _deviceContext.ScreenViewport;
+	XMFLOAT2 maxMargin = { _terrainTree.BoundingRect.RightBottom.x - viewport.Width, _terrainTree.BoundingRect.LeftTop.y - viewport.Height };
+	XMFLOAT2 newMargin = margin;
+	newMargin.x = std::max(0.f, std::min(newMargin.x, maxMargin.x));
+	newMargin.y = std::max(0.f, std::min(newMargin.y, maxMargin.y));
+
+	_currentMargin = newMargin;
+	return newMargin;
 }
 
 void TerrainRender::TerrianNodeRender::UploadGpuResource(ID3D12GraphicsCommandList* commandList, std::vector<WRL::ComPtr<IUnknown>>& resourcesWaitForUpload)

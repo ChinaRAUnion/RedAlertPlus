@@ -11,6 +11,7 @@ using Windows.UI.Core;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Input;
+using Windows.UI.Input;
 
 namespace ChinaRAUnion.RedAlertPlus.Shell.Areas.BattleControl.ViewModels
 {
@@ -26,7 +27,7 @@ namespace ChinaRAUnion.RedAlertPlus.Shell.Areas.BattleControl.ViewModels
 
         public void OnLoaded()
         {
-            IoC.Get<IInputService>().SetCursor(CursorType.None);
+            IoC.Get<IInputService>().SetCursor(CursorType.NoDrop);
         }
 
         public async void SetupSwapChainPanel(object sender, RoutedEventArgs e)
@@ -40,7 +41,20 @@ namespace ChinaRAUnion.RedAlertPlus.Shell.Areas.BattleControl.ViewModels
 
         public void OnPointerMoved(object sender, PointerRoutedEventArgs e)
         {
+            var ele = (UIElement)sender;
+            _gameEngine.OnPointerMoved(ele.RenderSize, e.GetCurrentPoint(ele));
+        }
 
+        public void OnPointerPressed(object sender, PointerRoutedEventArgs e)
+        {
+            var ele = (UIElement)sender;
+            _gameEngine.OnPointerPressed(ele.RenderSize, e.GetCurrentPoint(ele));
+        }
+
+        public void OnPointerReleased(object sender, PointerRoutedEventArgs e)
+        {
+            var ele = (UIElement)sender;
+            _gameEngine.OnPointerReleased(ele.RenderSize, e.GetCurrentPoint(ele));
         }
     }
 }

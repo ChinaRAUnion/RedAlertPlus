@@ -25,10 +25,14 @@ public:
 
 	virtual void Update();
 	virtual void Render();
+
+	void SetMapScrollSpeed(float x, float y);
 private:
 	MapRenderer _mapRender;
 	std::wstring _mapName;
 	std::shared_ptr<MapInfo> _mapInfo;
+	DirectX::XMFLOAT2 _mapScrollSpeed;
+	DirectX::XMFLOAT2 _currentMapMargin = {};
 };
 
 END_NS_ENGINE

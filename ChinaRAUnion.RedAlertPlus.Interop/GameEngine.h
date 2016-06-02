@@ -36,17 +36,33 @@ public interface class IGameEngineResourceResolver
 	Windows::Storage::Streams::IRandomAccessStream^ ResolveMap(Platform::String^ name);
 };
 
+public enum class GameMode
+{
+	Play,
+	MapEdit
+};
+
 [Windows::Foundation::Metadata::WebHostHiddenAttribute]
 public ref class GameEngine sealed
 {
 public:
 	GameEngine(IGameEngineResourceResolver^ resourceResovler);
 
+	property GameMode Mode
+	{
+		GameMode get() { return _gameMode; }
+		void set(GameMode value) { _gameMode = value; }
+	}
+
 	void SetSwapChainPanel(Windows::UI::Xaml::Controls::SwapChainPanel^ panel);
 
 	void UseMap(Platform::String^ mapName);
 	Windows::Foundation::IAsyncAction^ InitializeAsync();
 	void StartRenderLoop();
+
+	void OnPointerMoved(Windows::Foundation::Size uiSize, Windows::UI::Input::PointerPoint^ point);
+	void OnPointerPressed(Windows::Foundation::Size uiSize, Windows::UI::Input::PointerPoint^ point);
+	void OnPointerReleased(Windows::Foundation::Size uiSize, Windows::UI::Input::PointerPoint^ point);
 private:
 	void UpdateDisplayMetrices();
 	void OnSizeChanged(Platform::Object ^sender, Windows::UI::Xaml::SizeChangedEventArgs ^e);
@@ -58,6 +74,9 @@ private:
 	Windows::UI::Xaml::Controls::SwapChainPanel^ _swapChainPanel;
 	Windows::Graphics::Display::DisplayInformation^ _displayInfo;
 	Windows::Foundation::EventRegistrationToken _onSizeChangedRegToken, _onCompositionScaleChangedRegToken;
+	GameMode _gameMode = GameMode::Play;
+
+	Windows::Foundation::Point _lastRBPressedPoint;
 };
 
 END_NS_RAP

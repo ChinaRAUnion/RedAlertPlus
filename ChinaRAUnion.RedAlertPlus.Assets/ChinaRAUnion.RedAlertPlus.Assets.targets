@@ -13,5 +13,8 @@
       <Link>Assets\Shaders\TileLayerVS.cso</Link>
     </Content>
   </ItemGroup>
+  <PropertyGroup>
+    <Win32Resource>$(SolutionDir)bin\Resources\$(RedAlertPlus-Platform)\$(Configuration)\Resource.res</Win32Resource>
+</PropertyGroup>
 
 </Project>

@@ -7,7 +7,8 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d">
 
-    <Grid Background="Black" Loaded="{x:Bind ViewModel.OnLoaded}" PointerMoved="{x:Bind ViewModel.OnPointerMoved}">
+    <Grid Background="Black" Loaded="{x:Bind ViewModel.OnLoaded}" PointerMoved="{x:Bind ViewModel.OnPointerMoved}"
+          PointerPressed="{x:Bind ViewModel.OnPointerPressed}" PointerReleased="{x:Bind ViewModel.OnPointerReleased}">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*"/>
             <ColumnDefinition Width="Auto"/>

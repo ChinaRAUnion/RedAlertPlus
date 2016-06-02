@@ -90,6 +90,8 @@ public:
 
 	void SetMap(std::shared_ptr<MapInfo> mapInfo);
 	void CreateTerrainTree();
+
+	DirectX::XMFLOAT2 SetMapMargin(const DirectX::XMFLOAT2& margin);
 private:
 	DeviceContext& _deviceContext;
 	std::shared_ptr<MapInfo> _mapInfo;
@@ -108,6 +110,7 @@ private:
 
 	D3D12_RECT _scissorRect;
 	Tomato::Rect _currentViewRect;
+	DirectX::XMFLOAT2 _currentMargin = {};
 };
 
 END_NS_ENGINE

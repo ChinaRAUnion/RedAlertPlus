@@ -245,7 +245,6 @@
     <ClInclude Include="Map\TileSetInfo.h" />
     <ClInclude Include="Math\Collision.h" />
     <ClInclude Include="pch.h" />
-    <ClInclude Include="resource.h" />
     <ClInclude Include="targetver.h" />
     <ClInclude Include="Texture\Texture.h" />
     <ClInclude Include="Texture\TextureManager.h" />

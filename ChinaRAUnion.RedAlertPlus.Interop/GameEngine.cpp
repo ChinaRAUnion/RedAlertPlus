@@ -227,6 +227,49 @@ void GameEngine::StartRenderLoop()
 	ThreadPool::RunAsync(workItemHandler, WorkItemPriority::High, WorkItemOptions::TimeSliced);
 }
 
+void GameEngine::OnPointerMoved(Windows::Foundation::Size uiSize, Windows::UI::Input::PointerPoint ^ point)
+{
+	// 快速卷动
+	if (point->Properties->IsRightButtonPressed)
+	{
+		static double slideFactor = 0.3, maxSlideSpped = 10;
+		const auto position = point->Position;
+		
+		auto leftMove = (position.X - _lastRBPressedPoint.X) * slideFactor;
+		auto topMove = -(position.Y - _lastRBPressedPoint.Y) * slideFactor;
+		_engine->SetMapScrollSpeed(leftMove < 0 ? std::max(-maxSlideSpped, leftMove) : std::min(maxSlideSpped, leftMove), 
+			topMove < 0 ? std::max(-maxSlideSpped, topMove) : std::min(maxSlideSpped, topMove));
+	}
+	// 普通卷动
+	else
+	{
+		if (_gameMode == GameMode::Play)
+		{
+			static const double slideLength = 20, slideSpeed = 3;
+			const auto position = point->Position;
+
+			auto leftMove = position.X < slideLength ? -slideSpeed : 0;
+			auto topMove = position.Y < slideLength ? slideSpeed : 0;
+			auto rightMove = uiSize.Width - position.X < slideLength ? slideSpeed : 0;
+			auto bottomMove = uiSize.Height - position.Y < slideLength ? -slideSpeed : 0;
+			_engine->SetMapScrollSpeed(leftMove + rightMove, topMove + bottomMove);
+		}
+	}
+}
+
+void GameEngine::OnPointerPressed(Windows::Foundation::Size uiSize, Windows::UI::Input::PointerPoint ^ point)
+{
+	if (point->Properties->IsRightButtonPressed)
+	{
+		_lastRBPressedPoint = point->Position;
+	}
+}
+
+void GameEngine::OnPointerReleased(Windows::Foundation::Size uiSize, Windows::UI::Input::PointerPoint ^ point)
+{
+	OnPointerMoved(uiSize, point);
+}
+
 void GameEngine::UpdateDisplayMetrices()
 {
 	if (_swapChainPanel)

@@ -54,8 +54,13 @@ public:
 	TextureManager& get_TextureManager() noexcept { return _textureManager; }
 	DEFINE_PROPERTY_GET(TextureManager, TextureManager&);
 
+	size_t get_CurrentFrameIndex() const noexcept { return _currentFrame; }
+	DEFINE_PROPERTY_GET(CurrentFrameIndex, size_t);
+
 	void ExecuteCommandList(ID3D12CommandList* commandList);
 	void Present();
+
+	static constexpr UINT FrameCount = 3;		// 三重缓冲
 private:
 	void CreateDeviceIndependentResources();
 	void CreateDeviceResoures();
@@ -67,7 +72,6 @@ private:
 
 	UINT64& CurrentFence() { return _fenceValues.at(_currentFrame); }
 private:
-	static constexpr UINT FrameCount = 3;		// 三重缓冲
 	DXGI_FORMAT _backBufferFormat = DXGI_FORMAT_B8G8R8A8_UNORM;
 	DXGI_FORMAT _depthBufferFormat = DXGI_FORMAT_D32_FLOAT;
 

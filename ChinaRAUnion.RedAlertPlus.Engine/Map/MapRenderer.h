@@ -25,6 +25,7 @@ public:
 	virtual void Render();
 
 	void SetMap(std::shared_ptr<MapInfo> mapInfo);
+	DirectX::XMFLOAT2 SetMapMargin(const DirectX::XMFLOAT2& margin);
 private:
 	DeviceContext& _deviceContext;
 	TerrainRender _terrainRender;

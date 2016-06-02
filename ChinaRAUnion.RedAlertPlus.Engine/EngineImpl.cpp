@@ -75,6 +75,11 @@ void Engine::Render()
 	_deviceContext.Present();
 }
 
+void Engine::SetMapScrollSpeed(float x, float y)
+{
+	if (_map) _map->SetMapScrollSpeed(x, y);
+}
+
 concurrency::task<void> Engine::CreateWindowSizeDependentResources()
 {
 	for (auto&& container : _resourceContainers)

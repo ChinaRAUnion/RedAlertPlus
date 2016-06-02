@@ -9,7 +9,9 @@ namespace ChinaRAUnion.RedAlertPlus.Services
     public enum CursorType
     {
         None,
-        Normal
+        Normal,
+        
+        NoDrop
     }
 
     public interface IInputService

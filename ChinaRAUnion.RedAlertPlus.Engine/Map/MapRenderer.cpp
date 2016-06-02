@@ -45,3 +45,8 @@ void MapRenderer::SetMap(std::shared_ptr<MapInfo> mapInfo)
 	ThrowIfNot(mapInfo, L"Map cannot be nullptr.");
 	_terrainRender.SetMap(mapInfo);
 }
+
+DirectX::XMFLOAT2 MapRenderer::SetMapMargin(const DirectX::XMFLOAT2 & margin)
+{
+	return _terrainRender.SetMapMargin(margin);
+}

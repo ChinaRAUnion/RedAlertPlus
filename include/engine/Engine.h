@@ -40,6 +40,8 @@ interface DECLSPEC_UUID("DDDF5DA6-E458-4894-ACFC-5045A30676F7") IEngine : public
 	virtual void UseMap(const std::wstring& mapData) = 0;
 	virtual concurrency::task<void> InitializeAsync() = 0;
 	virtual void Render() = 0;
+
+	virtual void SetMapScrollSpeed(float x, float y) = 0;
 };
 
 

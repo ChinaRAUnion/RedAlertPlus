@@ -96,9 +96,6 @@
     <ClInclude Include="Map\MapInfo.h">
       <Filter>头文件\Map</Filter>
     </ClInclude>
-    <ClInclude Include="resource.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
     <ClInclude Include="Texture\TextureManager.h">
       <Filter>头文件\Texture</Filter>
     </ClInclude>

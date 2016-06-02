@@ -40,10 +40,19 @@ void Map::UploadGpuResource(std::vector<WRL::ComPtr<IUnknown>>& resourcesWaitFor
 
 void Map::Update()
 {
+	_currentMapMargin.x += _mapScrollSpeed.x;
+	_currentMapMargin.y += _mapScrollSpeed.y;
+
+	_currentMapMargin = _mapRender.SetMapMargin(_currentMapMargin);
 	_mapRender.Update();
 }
 
 void Map::Render()
 {
 	_mapRender.Render();
+}
+
+void Map::SetMapScrollSpeed(float x, float y)
+{
+	_mapScrollSpeed = { x, y };
 }

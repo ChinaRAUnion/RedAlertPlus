@@ -22,6 +22,8 @@ public:
 	virtual void UseMap(const std::wstring& mapName);
 	virtual concurrency::task<void> InitializeAsync();
 	virtual void Render();
+
+	virtual void SetMapScrollSpeed(float x, float y);
 private:
 	concurrency::task<void> CreateWindowSizeDependentResources();
 private:

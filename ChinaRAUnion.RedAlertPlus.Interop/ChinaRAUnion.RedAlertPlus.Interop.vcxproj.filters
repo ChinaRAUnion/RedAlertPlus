@@ -25,12 +25,18 @@
     <ClInclude Include="GameEngine.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="CustomCursorProvider.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="GameEngine.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="CustomCursorProvider.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>
