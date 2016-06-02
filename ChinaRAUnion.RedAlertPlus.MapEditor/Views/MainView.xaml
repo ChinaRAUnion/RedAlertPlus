@@ -9,15 +9,13 @@
     xmlns:cal="using:Caliburn.Micro"
     mc:Ignorable="d">
 
-    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" Loaded="{x:Bind ViewModel.OnLoaded}">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="Auto"/>
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
-        <Grid Width="200">
-            <ListView>
-                
-            </ListView>
+        <Grid Width="250">
+            <mapViews:MapOperationSelectorView DataContext="{x:Bind ViewModel.MapOperationSelector}"/>
         </Grid>
         <Grid Grid.Column="1">
             <Grid.RowDefinitions>

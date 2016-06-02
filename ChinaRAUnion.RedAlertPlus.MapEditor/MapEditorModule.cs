@@ -14,6 +14,7 @@ namespace ChinaRAUnion.RedAlertPlus
         public static void UseMapEditor(this SimpleContainer container)
         {
             container.Singleton<MainViewModel>();
+            container.Singleton<SplashViewModel>();
             //container.Instance(ResourceLoader.GetForCurrentView());
         }
 

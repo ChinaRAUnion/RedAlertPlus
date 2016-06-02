@@ -13,16 +13,15 @@ namespace ChinaRAUnion.RedAlertPlus.MapEditor.ViewModels
     {
         private readonly IResourceManager _resourceManager;
         internal MapDisplayViewModel MapDisplay { get; } = new MapDisplayViewModel();
+        internal MapOperationSelectorViewModel MapOperationSelector { get; } = new MapOperationSelectorViewModel();
 
         public MainViewModel(IResourceManager resourceManager)
         {
             _resourceManager = resourceManager;
-            LoadData();
         }
 
-        private async void LoadData()
+        public void OnLoaded()
         {
-            await _resourceManager.InitializeAsync();
             MapDisplay.InitializeMap(100, 200);
         }
     }

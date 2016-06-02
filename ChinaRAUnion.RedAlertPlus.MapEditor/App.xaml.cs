@@ -101,10 +101,10 @@ namespace ChinaRAUnion.RedAlertPlus.MapEditor
 #if DEBUG
             if (System.Diagnostics.Debugger.IsAttached)
             {
-                this.DebugSettings.EnableFrameRateCounter = true;
+                //this.DebugSettings.EnableFrameRateCounter = true;
             }
 #endif
-            DisplayRootViewFor<ViewModels.MainViewModel>();
+            DisplayRootViewFor<ViewModels.SplashViewModel>();
             if (args.PreviousExecutionState == ApplicationExecutionState.Terminated)
             {
                 //_eventAggregator.PublishOnUIThread(new ResumeStateMessage());

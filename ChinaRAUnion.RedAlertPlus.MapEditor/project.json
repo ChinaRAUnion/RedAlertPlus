@@ -5,7 +5,8 @@
     "Microsoft.Xaml.Behaviors.Uwp.Managed": "1.1.0",
     "Tomato.Media.Codec": "0.0.4-alpha6",
     "Tomato.Mvvm.Core": "0.0.1-alpha2",
-    "Tomato.Mvvm.Xaml": "0.0.1-alpha3"
+    "Tomato.Mvvm.Xaml": "0.0.1-alpha3",
+    "WinRTXamlToolkit.UWP": "2.0.0"
   },
   "frameworks": {
     "uap10.0": {}

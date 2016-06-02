@@ -1,0 +1,48 @@
+﻿<UserControl
+    x:Class="ChinaRAUnion.RedAlertPlus.MapEditor.Areas.Map.Views.MapOperationSelectorView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:ChinaRAUnion.RedAlertPlus.MapEditor.Areas.Map.Views"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:xtkControls="using:WinRTXamlToolkit.Controls"
+    xmlns:xtkData="using:WinRTXamlToolkit.Controls.Data"
+    mc:Ignorable="d"
+    d:DesignHeight="300"
+    d:DesignWidth="400">
+
+    <Grid Loaded="{x:Bind ViewModel.OnLoaded}">
+        <Pivot>
+            <PivotItem Header="常用">
+                <xtkControls:TreeView ItemsSource="{x:Bind ViewModel.GeneralOperations}">
+                    <xtkControls:TreeView.ItemTemplate>
+                        <DataTemplate>
+                            <xtkData:DataTemplateExtensions.Hierarchy>
+                                <xtkData:HierarchicalDataTemplate ItemsSource="{Binding Children}"/>
+                            </xtkData:DataTemplateExtensions.Hierarchy>
+                            <TextBlock Text="{Binding Name}"/>
+                        </DataTemplate>
+                    </xtkControls:TreeView.ItemTemplate>
+                </xtkControls:TreeView>
+            </PivotItem>
+            <PivotItem Header="单位"/>
+            <PivotItem Header="建筑"/>
+        </Pivot>
+        <!--<ListView ItemsSource="{Binding Source={StaticResource OperationsSource}}">
+            <ListView.GroupStyle>
+                <GroupStyle HidesIfEmpty="True">
+                    <GroupStyle.HeaderTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding Key}"/>
+                        </DataTemplate>
+                    </GroupStyle.HeaderTemplate>
+                </GroupStyle>
+            </ListView.GroupStyle>
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <TextBlock Text="{Binding Name}"/>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>-->
+    </Grid>
+</UserControl>
