@@ -1,4 +1,5 @@
 ﻿using Caliburn.Micro;
+using ChinaRAUnion.RedAlertPlus.MapEditor.Services;
 using ChinaRAUnion.RedAlertPlus.MapEditor.ViewModels;
 using System;
 using System.Collections.Generic;
@@ -15,7 +16,8 @@ namespace ChinaRAUnion.RedAlertPlus
         {
             container.Singleton<MainViewModel>();
             container.Singleton<SplashViewModel>();
-            //container.Instance(ResourceLoader.GetForCurrentView());
+            container.Singleton<ITileSetContextService, TileSetContextService>();
+            container.Instance(ResourceLoader.GetForCurrentView());
         }
 
         private static void ModuleReferences()

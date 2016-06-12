@@ -7,26 +7,32 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:xtkControls="using:WinRTXamlToolkit.Controls"
     xmlns:xtkData="using:WinRTXamlToolkit.Controls.Data"
+    xmlns:localViewModels="using:ChinaRAUnion.RedAlertPlus.MapEditor.Areas.Map.ViewModels"
     mc:Ignorable="d"
     d:DesignHeight="300"
     d:DesignWidth="400">
+    <UserControl.Resources>
+        <DataTemplate x:Key="MapOperationsDataTemplate" x:DataType="localViewModels:MapOperation">
+            <xtkData:DataTemplateExtensions.Hierarchy>
+                <xtkData:HierarchicalDataTemplate ItemsSource="{Binding Children}"/>
+            </xtkData:DataTemplateExtensions.Hierarchy>
+            <TextBlock Text="{x:Bind DisplayName}"/>
+        </DataTemplate>
+    </UserControl.Resources>
 
     <Grid Loaded="{x:Bind ViewModel.OnLoaded}">
         <Pivot>
-            <PivotItem Header="常用">
-                <xtkControls:TreeView ItemsSource="{x:Bind ViewModel.GeneralOperations}">
-                    <xtkControls:TreeView.ItemTemplate>
-                        <DataTemplate>
-                            <xtkData:DataTemplateExtensions.Hierarchy>
-                                <xtkData:HierarchicalDataTemplate ItemsSource="{Binding Children}"/>
-                            </xtkData:DataTemplateExtensions.Hierarchy>
-                            <TextBlock Text="{Binding Name}"/>
-                        </DataTemplate>
-                    </xtkControls:TreeView.ItemTemplate>
-                </xtkControls:TreeView>
+            <PivotItem x:Uid="General" Header="General">
+                <xtkControls:TreeView ItemsSource="{x:Bind ViewModel.GeneralOperations}"
+                                      ItemTemplate="{StaticResource MapOperationsDataTemplate}"/>
             </PivotItem>
-            <PivotItem Header="单位"/>
-            <PivotItem Header="建筑"/>
+            <PivotItem x:Uid="Unit" Header="Unit">
+                <xtkControls:TreeView ItemsSource="{x:Bind ViewModel.UnitOperations}"
+                                      ItemTemplate="{StaticResource MapOperationsDataTemplate}"/></PivotItem>
+            <PivotItem x:Uid="Structure" Header="Structure">
+                <xtkControls:TreeView ItemsSource="{x:Bind ViewModel.GeneralOperations}"
+                                      ItemTemplate="{StaticResource MapOperationsDataTemplate}"/>
+            </PivotItem>
         </Pivot>
         <!--<ListView ItemsSource="{Binding Source={StaticResource OperationsSource}}">
             <ListView.GroupStyle>

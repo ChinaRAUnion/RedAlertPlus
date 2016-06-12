@@ -8,6 +8,7 @@
 #include "GameEngine.h"
 #include <windows.ui.xaml.media.dxinterop.h>
 #include <sstream>
+#include "ResourceResolver.h"
 
 using namespace NS_RAP;
 using namespace WRL;
@@ -72,96 +73,6 @@ namespace
 		}
 		return rotation;
 	}
-
-	class ResourceResolver : public WRL::RuntimeClass<WRL::RuntimeClassFlags<WRL::ClassicCom>, NS_ENGINE::IResourceResovler>
-	{
-	public:
-		ResourceResolver(IGameEngineResourceResolver^ resourceResolver)
-			: _resourceResovler(resourceResolver)
-		{
-
-		}
-
-		virtual Concurrency::task<std::vector<byte>> ResovleShader(const std::wstring &name)
-		{
-			auto res = _resourceResovler->ResolveShader(Platform::StringReference(name.c_str(), name.length()));
-			return ReadStream(res);
-		}
-
-		virtual concurrency::task<NS_ENGINE::TileSetPackageContent> ResolveTileSetPackageFile(const std::wstring& name)
-		{
-			auto res = _resourceResovler->ResolveTileSetPackageFile(Platform::StringReference(name.c_str(), name.length()));
-			auto tileSet = co_await ReadString(res->TileSet);
-			auto image = co_await ReadStream(res->Image);
-			auto extraImage = co_await ReadStream(res->ExtraImage);
-			return{ tileSet, image,extraImage };
-		}
-
-		virtual concurrency::task<NS_ENGINE::BlobWithContentType> ResolveTexture(const std::wstring& name)
-		{
-			auto res = _resourceResovler->ResolveTexture(Platform::StringReference(name.c_str(), name.length()));
-			return{ co_await ReadStream(res), std::wstring(res->ContentType->Begin(), res->ContentType->End()) };
-		}
-
-		virtual concurrency::task<std::wstring> ResolveMap(const std::wstring& name)
-		{
-			auto res = _resourceResovler->ResolveMap(Platform::StringReference(name.c_str(), name.length()));
-			return ReadString(res);
-		}
-	private:
-		Concurrency::task<std::vector<byte>> ReadStream(IRandomAccessStream^ stream)
-		{
-			auto dataReader = ref new DataReader(stream->CloneStream());
-			auto len = co_await concurrency::create_task(dataReader->LoadAsync(stream->Size));
-			std::vector<byte> data(len);
-			dataReader->ReadBytes(Platform::ArrayReference<byte>(data.data(), data.size()));
-			return std::move(data);
-		}
-
-		Concurrency::task<std::vector<byte>> ReadStream(IInputStream^ stream)
-		{
-			auto dataReader = ref new DataReader(stream);
-			std::vector<byte> data;
-			while (true)
-			{
-				auto len = co_await concurrency::create_task(dataReader->LoadAsync(64 * 1024));
-				if (len == 0)break;
-				auto oldLen = data.size();
-				data.resize(oldLen + len);
-				dataReader->ReadBytes(Platform::ArrayReference<byte>(data.data() + oldLen, len));
-			}
-			return std::move(data);
-		}
-
-		Concurrency::task<std::wstring> ReadString(IRandomAccessStream^ stream)
-		{
-			auto dataReader = ref new DataReader(stream->CloneStream());
-			auto len = co_await concurrency::create_task(dataReader->LoadAsync(stream->Size));
-			auto str = dataReader->ReadString(len);
-			if (str->Length() && *str->Begin() == 0x0000FEFFu)
-				return std::wstring(str->Begin() + 1, str->End());
-			return std::wstring(str->Begin(), str->End());
-		}
-
-		Concurrency::task<std::wstring> ReadString(IInputStream^ stream)
-		{
-			auto dataReader = ref new DataReader(stream);
-			std::wstringstream ss;
-			while (true)
-			{
-				auto len = co_await concurrency::create_task(dataReader->LoadAsync(64 * 1024));
-				if (len == 0)break;
-				auto str = dataReader->ReadString(len);
-				if (str->Length() && *str->Begin() == 0x0000FEFFu)
-					ss << std::wstring(str->Begin() + 1, str->End());
-				else
-					ss << std::wstring(str->Begin(), str->End());
-			}
-			return ss.str();
-		}
-	private:
-		IGameEngineResourceResolver^ _resourceResovler;
-	};
 }
 
 GameEngine::GameEngine(IGameEngineResourceResolver^ resourceResovler)

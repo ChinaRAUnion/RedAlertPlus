@@ -1,7 +1,7 @@
 ﻿{
   "TileSets": [
     {
-      "name": "urban",
+      "name": "Urban",
       "source": "ms-appx:///Assets/Map/TileSet/urban.tts",
       "contentType": "application/tts"
     }

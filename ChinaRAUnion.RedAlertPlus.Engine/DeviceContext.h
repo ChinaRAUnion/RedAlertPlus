@@ -63,7 +63,7 @@ public:
 	static constexpr UINT FrameCount = 3;		// ÈýÖØ»º³å
 private:
 	void CreateDeviceIndependentResources();
-	void CreateDeviceResoures();
+	void CreateDeviceResources();
 	void CreateWindowSizeDependentResources();
 
 	void UpdateOutputSize();

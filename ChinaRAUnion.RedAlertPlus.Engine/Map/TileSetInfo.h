@@ -34,6 +34,7 @@ struct PickAnyUnit
 class TileSetInfo
 {
 public:
+	TileSetInfo(){}
 	TileSetInfo(const std::wstring& json, uint32_t imageWidth, uint32_t imageHeight, uint32_t extraImageWidth, uint32_t extraImageHeight);
 
 	const Tile& FindTile(uint32_t id) const;

@@ -1,4 +1,5 @@
 ﻿using Caliburn.Micro;
+using ChinaRAUnion.RedAlertPlus.MapEditor.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -28,13 +29,13 @@ namespace ChinaRAUnion.RedAlertPlus.MapEditor.Areas.Map.ViewModels
             _gameEngine.SetSwapChainPanel(swapChainPanel);
         }
 
-        public async void InitializeMap(uint width, uint height)
+        public async void InitializeMap(MapInfo mapInfo)
         {
             _gameEngine.GenerateMap(new GameMapGenerateOptions
             {
-                Width = width,
-                Height = height,
-                TileSetName = "urban"
+                Width = mapInfo.Width,
+                Height = mapInfo.Height,
+                TileSetName = mapInfo.TileSetName
             });
             await _gameEngine.InitializeAsync();
             _gameEngine.StartRenderLoop();

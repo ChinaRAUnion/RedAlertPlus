@@ -1,60 +1,59 @@
-﻿using ChinaRAUnion.RedAlertPlus.FileFormat;
+﻿using Caliburn.Micro;
+using ChinaRAUnion.RedAlertPlus.FileFormat;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.IO.Compression;
 using System.Linq;
+using System.Runtime.InteropServices.WindowsRuntime;
 using System.Text;
 using System.Threading.Tasks;
+using Windows.Graphics.Imaging;
+using Windows.Storage.Streams;
+using Windows.UI.Xaml.Media;
 
 namespace ChinaRAUnion.RedAlertPlus.Map
 {
     public class TileSetReader
     {
-        private TileSet _rawTileSet;
+        private readonly TileSet _rawTileSet;
+        private readonly ImageSource[] _pickAnyUnits;
+        private TileSetGraphicsProvider _tsgProvider;
 
+        public TileSet TileSet => _rawTileSet;
 
-        protected TileSetReader()
+        public TileSetReader(TileSet tileSet)
         {
-
+            _rawTileSet = tileSet;
+            _pickAnyUnits = new ImageSource[tileSet.PickAnyTileUnits.Count];
         }
 
-        private async Task LoadAsync(Stream stream)
+        private async Task LoadAsync()
         {
-            var archive = new ZipArchive(stream, ZipArchiveMode.Read);
-            await Task.WhenAll(LoadTileSetAsync(archive.GetEntry(TileSetJsonFileName)),
-                LoadImageAsync(archive.GetEntry(ImageFileName)), LoadExtraImageAsync(archive.GetEntry(ExtraImageFileName)));
+            _tsgProvider = await TileSetGraphicsProvider.CreateFromTileSet(IoC.Get<IGameEngineResourceResolver>(), _rawTileSet.Name);
+            for (int i = 0; i < _pickAnyUnits.Length; i++)
+                _pickAnyUnits[i] = await _tsgProvider.CreatePickAnyUnit(i);
         }
 
-        private Task LoadImageAsync(ZipArchiveEntry entry)
+        public Tuple<string, ImageSource> GetPickAnyTileUnit(int id)
         {
-            throw new NotImplementedException();
+            return Tuple.Create(_rawTileSet.PickAnyTileUnits[id].Category, _pickAnyUnits[id]);
         }
 
-        private Task LoadExtraImageAsync(ZipArchiveEntry entry)
+        public static async Task<TileSetReader> CreateFromTileSetPackage(ITileSetPackageContent package)
         {
-            throw new NotImplementedException();
-        }
-
-        private async Task LoadTileSetAsync(ZipArchiveEntry entry)
-        {
-            using (var reader = new StreamReader(entry.Open()))
-            {
-                _rawTileSet = JsonConvert.DeserializeObject<TileSet>(await reader.ReadToEndAsync());
-            }
-        }
-
-        public static async Task<TileSetReader> CreateFromStream(Stream stream)
-        {
-            var reader = new TileSetReader();
-            await reader.LoadAsync(stream);
+            var reader = new TileSetReader(await LoadTileSetAsync(package.TileSet));
+            await reader.LoadAsync();
             return reader;
         }
 
-
-        private const string TileSetJsonFileName = "tileSet.json";
-        private const string ImageFileName = "image.dds";
-        private const string ExtraImageFileName = "extraImage.dds";
+        private static async Task<TileSet> LoadTileSetAsync(IInputStream stream)
+        {
+            using (var reader = new StreamReader(stream.AsStreamForRead()))
+            {
+                return JsonConvert.DeserializeObject<TileSet>(await reader.ReadToEndAsync());
+            }
+        }
     }
 }

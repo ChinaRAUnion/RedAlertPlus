@@ -78,7 +78,7 @@ DeviceContext::DeviceContext()
 	_textureManager(*this)
 {
 	CreateDeviceIndependentResources();
-	CreateDeviceResoures();
+	CreateDeviceResources();
 
 	_textureManager.Initialize();
 }
@@ -131,7 +131,7 @@ void DeviceContext::CreateDeviceIndependentResources()
 	m.data();
 }
 
-void DeviceContext::CreateDeviceResoures()
+void DeviceContext::CreateDeviceResources()
 {
 #if defined(_DEBUG)
 	// 如果项目处于调试生成阶段，请通过 SDK 层启用调试。

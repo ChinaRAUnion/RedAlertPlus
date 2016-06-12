@@ -76,6 +76,7 @@ concurrency::task<void> Engine::InitializeAsync()
 	for (auto&& container : _resourceContainers)
 		container->UploadGpuResource(resourcesWaitForUpload);
 	_deviceContext.WaitForGpu();
+	CreateWindowSizeDependentResources();
 }
 
 void Engine::Render()

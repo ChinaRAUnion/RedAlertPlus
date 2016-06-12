@@ -58,6 +58,9 @@
     <ClCompile Include="Map\TileSetInfo.cpp">
       <Filter>源文件\Map</Filter>
     </ClCompile>
+    <ClCompile Include="Map\TileSetGraphicsProviderImpl.cpp">
+      <Filter>源文件\Map</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h">
@@ -106,6 +109,12 @@
       <Filter>头文件\Math</Filter>
     </ClInclude>
     <ClInclude Include="Map\TileSetInfo.h">
+      <Filter>头文件\Map</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\engine\TileSetGraphicsProvider.h">
+      <Filter>头文件\Map</Filter>
+    </ClInclude>
+    <ClInclude Include="Map\TileSetGraphicsProviderImpl.h">
       <Filter>头文件\Map</Filter>
     </ClInclude>
   </ItemGroup>

@@ -221,11 +221,14 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="CustomCursorProvider.h" />
+    <ClInclude Include="Map\TileSetGraphicsProvider.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="GameEngine.h" />
+    <ClInclude Include="ResourceResolver.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="CustomCursorProvider.cpp" />
+    <ClCompile Include="Map\TileSetGraphicsProvider.cpp" />
     <ClCompile Include="pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>

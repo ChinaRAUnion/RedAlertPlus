@@ -14,7 +14,7 @@
             <ColumnDefinition Width="Auto"/>
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
-        <Grid Width="250">
+        <Grid Width="350">
             <mapViews:MapOperationSelectorView DataContext="{x:Bind ViewModel.MapOperationSelector}"/>
         </Grid>
         <Grid Grid.Column="1">

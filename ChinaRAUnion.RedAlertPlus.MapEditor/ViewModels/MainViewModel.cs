@@ -1,4 +1,6 @@
-﻿using ChinaRAUnion.RedAlertPlus.MapEditor.Areas.Map.ViewModels;
+﻿using ChinaRAUnion.RedAlertPlus.Map;
+using ChinaRAUnion.RedAlertPlus.MapEditor.Areas.Map.ViewModels;
+using ChinaRAUnion.RedAlertPlus.MapEditor.Models;
 using ChinaRAUnion.RedAlertPlus.Resource;
 using System;
 using System.Collections.Generic;
@@ -20,9 +22,17 @@ namespace ChinaRAUnion.RedAlertPlus.MapEditor.ViewModels
             _resourceManager = resourceManager;
         }
 
-        public void OnLoaded()
+        public async void OnLoaded()
         {
-            MapDisplay.InitializeMap(100, 200);
+            var mapInfo = new MapInfo
+            {
+                Width = 100,
+                Height = 200,
+                TileSetName = "Urban"
+            };
+            var tileSetReader = await TileSetReader.CreateFromTileSetPackage(_resourceManager.TileSets.FindResource(mapInfo.TileSetName).Value);
+            MapDisplay.InitializeMap(mapInfo);
+            MapOperationSelector.InitializeMap(mapInfo, tileSetReader);
         }
     }
 }
