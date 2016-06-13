@@ -135,6 +135,7 @@
       <CompileAsWinRT>true</CompileAsWinRT>
       <PreprocessorDefinitions>CRAU_ENGINE_EXPORTS;RAPIDJSON_HAS_STDSTRING=1;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalOptions>/await %(AdditionalOptions)</AdditionalOptions>
+      <MultiProcessorCompilation>false</MultiProcessorCompilation>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -152,6 +153,7 @@
       <CompileAsWinRT>true</CompileAsWinRT>
       <PreprocessorDefinitions>CRAU_ENGINE_EXPORTS;RAPIDJSON_HAS_STDSTRING=1;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalOptions>/await %(AdditionalOptions)</AdditionalOptions>
+      <MultiProcessorCompilation>false</MultiProcessorCompilation>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -169,6 +171,7 @@
       <CompileAsWinRT>true</CompileAsWinRT>
       <PreprocessorDefinitions>CRAU_ENGINE_EXPORTS;RAPIDJSON_HAS_STDSTRING=1;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalOptions>/await %(AdditionalOptions)</AdditionalOptions>
+      <MultiProcessorCompilation>false</MultiProcessorCompilation>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -186,6 +189,7 @@
       <CompileAsWinRT>true</CompileAsWinRT>
       <PreprocessorDefinitions>CRAU_ENGINE_EXPORTS;RAPIDJSON_HAS_STDSTRING=1;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalOptions>/await %(AdditionalOptions)</AdditionalOptions>
+      <MultiProcessorCompilation>false</MultiProcessorCompilation>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -203,6 +207,7 @@
       <CompileAsWinRT>true</CompileAsWinRT>
       <PreprocessorDefinitions>CRAU_ENGINE_EXPORTS;RAPIDJSON_HAS_STDSTRING=1;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalOptions>/await %(AdditionalOptions)</AdditionalOptions>
+      <MultiProcessorCompilation>false</MultiProcessorCompilation>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -220,6 +225,7 @@
       <CompileAsWinRT>true</CompileAsWinRT>
       <PreprocessorDefinitions>CRAU_ENGINE_EXPORTS;RAPIDJSON_HAS_STDSTRING=1;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalOptions>/await %(AdditionalOptions)</AdditionalOptions>
+      <MultiProcessorCompilation>false</MultiProcessorCompilation>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>

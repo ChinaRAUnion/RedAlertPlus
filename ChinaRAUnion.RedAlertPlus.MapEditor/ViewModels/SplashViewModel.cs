@@ -1,6 +1,7 @@
 ﻿
 using Caliburn.Micro;
 using ChinaRAUnion.RedAlertPlus.Resource;
+using ChinaRAUnion.RedAlertPlus.Rules;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -39,6 +40,7 @@ namespace ChinaRAUnion.RedAlertPlus.MapEditor.ViewModels
         private async Task LoadResources()
         {
             await _resourceManager.InitializeAsync();
+            await IoC.Get<IRulesLoader>().InitializeAsync();
         }
     }
 }

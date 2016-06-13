@@ -36,6 +36,14 @@ public interface class IGameEngineResourceResolver
 	Windows::Storage::Streams::IRandomAccessStream^ ResolveMap(Platform::String^ name);
 };
 
+public interface class IGameEngineRulesResolver
+{
+	property Windows::Foundation::Collections::IMapView<Platform::String^, Platform::Object^>^ Infantry
+	{
+		Windows::Foundation::Collections::IMapView<Platform::String^, Platform::Object^>^ get();
+	}
+};
+
 public enum class GameMode
 {
 	Play,
@@ -71,7 +79,7 @@ private:
 public ref class GameEngine sealed
 {
 public:
-	GameEngine(IGameEngineResourceResolver^ resourceResovler);
+	GameEngine(IGameEngineResourceResolver^ resourceResolver, IGameEngineRulesResolver^ rulesResolver);
 
 	property GameMode Mode
 	{

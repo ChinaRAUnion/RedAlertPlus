@@ -19,9 +19,9 @@ namespace ChinaRAUnion.RedAlertPlus.Shell.Areas.BattleControl.ViewModels
     {
         private readonly GameEngine _gameEngine;
 
-        public BattleControlViewModel(IGameEngineResourceResolver resourceResolver)
+        public BattleControlViewModel(IGameEngineResourceResolver resourceResolver, IGameEngineRulesResolver rulesResolver)
         {
-            _gameEngine = new GameEngine(resourceResolver);
+            _gameEngine = new GameEngine(resourceResolver, rulesResolver);
             _gameEngine.UseMap("map1");
         }
 

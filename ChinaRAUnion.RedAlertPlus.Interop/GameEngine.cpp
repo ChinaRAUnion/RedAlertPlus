@@ -73,12 +73,41 @@ namespace
 		}
 		return rotation;
 	}
+
+	class RulesResolver : public WRL::RuntimeClass<WRL::RuntimeClassFlags<WRL::ClassicCom>, NS_ENGINE::IRulesResolver>
+	{
+	public:
+		RulesResolver(IGameEngineRulesResolver^ rulesResolver)
+		{
+			LoadInfantry(rulesResolver);
+		}
+
+		virtual const std::unordered_map<std::wstring, Api::IInfantry*>& get_Infantry()
+		{
+			return _infantry;
+		}
+	private:
+		void LoadInfantry(IGameEngineRulesResolver^ rulesResolver)
+		{
+			for (auto&& it : rulesResolver->Infantry)
+			{
+				auto value = reinterpret_cast<IInspectable*>(it->Value);
+				ComPtr<Api::IInfantry> infantry;
+				ThrowIfFailed(value->QueryInterface(IID_PPV_ARGS(&infantry)));
+				auto key = it->Key;
+				_infantry.emplace(std::wstring{ key->Begin(), key->End() }, infantry.Get());
+			}
+		}
+	private:
+		std::unordered_map<std::wstring, Api::IInfantry*> _infantry;
+	};
 }
 
-GameEngine::GameEngine(IGameEngineResourceResolver^ resourceResovler)
+GameEngine::GameEngine(IGameEngineResourceResolver^ resourceResolver, IGameEngineRulesResolver^ rulesResolver)
 	:_displayInfo(DisplayInformation::GetForCurrentView())
 {
-	auto resolver = Make<ResourceResolver>(resourceResovler);
+	auto resolver = Make<ResourceResolver>(resourceResolver);
+	auto nativeRulesResolver = Make<RulesResolver>(rulesResolver);
 	ThrowIfFailed(CreateEngine(&_engine, resolver.Get()));
 	_engine->SetSwapChainChangedHandler([weak = Platform::WeakReference(this)](IDXGISwapChain* swapChain)
 	{

@@ -1,5 +1,6 @@
 ﻿using Caliburn.Micro;
 using ChinaRAUnion.RedAlertPlus.Resource;
+using ChinaRAUnion.RedAlertPlus.Rules;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -26,10 +27,18 @@ namespace ChinaRAUnion.RedAlertPlus
             _container = container;
         }
 
-        public void UseResourceManager(params Uri[] resourceConfigFiles)
+        public ResourceModuleConfig UseResourceManager(params Uri[] resourceConfigFiles)
         {
             _container.Instance<IResourceManager>(new ResourceManager(resourceConfigFiles));
             _container.Singleton<IGameEngineResourceResolver, GameEngineResourceResolver>();
+            return this;
+        }
+
+        public ResourceModuleConfig UseRulesLoader(params Uri[] resourceConfigFiles)
+        {
+            _container.Instance<IRulesLoader>(new RulesLoader(resourceConfigFiles));
+            _container.Singleton<IGameEngineRulesResolver, GameEngineRulesResolver>();
+            return this;
         }
     }
 }

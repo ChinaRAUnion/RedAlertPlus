@@ -63,7 +63,7 @@ namespace ChinaRAUnion.RedAlertPlus.MapEditor.Areas.Map.ViewModels
             var resManager = IoC.Get<IResourceManager>();
             var infantryOperation = new MapOperation { Name = "Editor/Infantry" };
             //PopulateInfantryOperation(infantryOperation);
-
+            var i = new Api.Rules.Infantry();
             return new[] { infantryOperation };
         }
     }

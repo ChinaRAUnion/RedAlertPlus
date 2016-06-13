@@ -117,8 +117,10 @@
     <Compile Include="Primitives\ResourceBase.cs" />
     <Compile Include="Primitives\ResourceConfig.cs" />
     <Compile Include="Primitives\ResourceEntry.cs" />
+    <Compile Include="Primitives\RulesConfig.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Resource\IResourceManager.cs" />
+    <Compile Include="Rules\IRulesLoader.cs" />
     <Compile Include="Services\IInputService.cs" />
     <Compile Include="Services\IThemeService.cs" />
     <EmbeddedResource Include="Properties\ChinaRAUnion.RedAlertPlus.Core.rd.xml" />
@@ -128,6 +130,11 @@
       <Project>{81b78bc6-f4e4-412d-aa0a-529580d530e5}</Project>
       <Name>ChinaRAUnion.RedAlertPlus.Interop</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="ChinaRAUnion.RedAlertPlus.Api">
+      <HintPath>..\ChinaRAUnion.RedAlertPlus.Api\bin\Debug\netstandard1.4\ChinaRAUnion.RedAlertPlus.Api.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">
     <VisualStudioVersion>14.0</VisualStudioVersion>

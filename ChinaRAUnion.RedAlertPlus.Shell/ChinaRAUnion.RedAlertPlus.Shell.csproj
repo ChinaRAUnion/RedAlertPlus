@@ -98,6 +98,7 @@
     <Content Include="Assets\Config\TileSets.json" />
     <Content Include="Assets\Config\Maps.json" />
     <Content Include="Assets\Config\Units\Infantry.json" />
+    <Content Include="Assets\Config\Rules\Infantry.json" />
     <None Include="project.json" />
     <PRIResource Include="Strings\en\GameStuff.resw" />
     <PRIResource Include="Strings\zh-Hans\GameStuff.resw" />

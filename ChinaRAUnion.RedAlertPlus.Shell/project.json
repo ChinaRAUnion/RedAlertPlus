@@ -1,7 +1,7 @@
 ﻿{
   "dependencies": {
     "Caliburn.Micro": "3.0.1",
-    "Microsoft.NETCore.UniversalWindowsPlatform": "5.0.0",
+    "Microsoft.NETCore.UniversalWindowsPlatform": "5.1.0",
     "Tomato.Media.Codec": "0.0.4-alpha6",
     "Tomato.Media.Gaming": "0.0.1-alpha1",
     "Tomato.Mvvm.Caliburn": "0.0.1-alpha1",

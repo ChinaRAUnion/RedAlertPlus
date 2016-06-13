@@ -18,7 +18,7 @@ namespace ChinaRAUnion.RedAlertPlus.MapEditor.Areas.Map.ViewModels
 
         public MapDisplayViewModel()
         {
-            _gameEngine = new GameEngine(IoC.Get<IGameEngineResourceResolver>());
+            _gameEngine = new GameEngine(IoC.Get<IGameEngineResourceResolver>(), IoC.Get<IGameEngineRulesResolver>());
             _gameEngine.Mode = GameMode.MapEdit;
         }
 

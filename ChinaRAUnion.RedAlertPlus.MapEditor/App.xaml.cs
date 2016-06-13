@@ -75,7 +75,8 @@ namespace ChinaRAUnion.RedAlertPlus.MapEditor
             _container.UseMapEditor();
             _container.UseResource()
                 .UseResourceManager(new Uri("ms-appx:///Assets/Config/Shaders.json"),
-                                    new Uri("ms-appx:///Assets/Config/TileSets.json"));
+                                    new Uri("ms-appx:///Assets/Config/TileSets.json"))
+                .UseRulesLoader(new Uri("ms-appx:///Assets/Config/Rules/Infantry.json"));
             _container.UseAudio();
             _eventAggregator = _container.GetInstance<IEventAggregator>();
             ViewModelBinder.ApplyConventionsByDefault = false;

@@ -1,0 +1,11 @@
+{
+  "dependencies": {
+    "System.Runtime.Loader": "4.0.0-rc2-24027",
+    "NETStandard.Library": "1.5.0-rc2-24027"
+  },
+  "frameworks": {
+    "netstandard1.5": {
+      "imports": "portable-net452"
+    }
+  }
+}

@@ -91,3 +91,12 @@ typedef std::ratio<1, 10000000> hn;
 typedef std::chrono::duration<long long, hn> hnseconds;
 
 #endif
+
+#if !WINAPI_FAMILY_PARTITION(WINAPI_PARTITION_DESKTOP)
+inline void __stdcall
+_com_issue_errorex(HRESULT hr, IUnknown*, REFIID)
+{
+	_com_issue_errorex(hr, nullptr);
+}
+
+#endif

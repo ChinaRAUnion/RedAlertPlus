@@ -26,10 +26,20 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Include", "Include", "{452D
 	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ChinaRAUnion.RedAlertPlus.Engine", "ChinaRAUnion.RedAlertPlus.Engine\ChinaRAUnion.RedAlertPlus.Engine.vcxproj", "{E4420DA6-0F0F-4A2E-8EBC-513FA19E099E}"
+	ProjectSection(ProjectDependencies) = postProject
+		{4EFA605A-7620-4584-B532-D7D267FBE254} = {4EFA605A-7620-4584-B532-D7D267FBE254}
+	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ChinaRAUnion.RedAlertPlus.Assets", "ChinaRAUnion.RedAlertPlus.Assets\ChinaRAUnion.RedAlertPlus.Assets.vcxproj", "{74C2CBBC-E8D9-48DA-9A1E-59B6747C8A21}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ChinaRAUnion.RedAlertPlus.MapEditor", "ChinaRAUnion.RedAlertPlus.MapEditor\ChinaRAUnion.RedAlertPlus.MapEditor.csproj", "{B5C675D9-DBB5-441E-9029-D0950DB86BEB}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{E46E9E8D-06C4-484E-91BD-04FF38DC650E}"
+	ProjectSection(SolutionItems) = preProject
+		ChinaRAUnion.RedAlertPlus.Api\global.json = ChinaRAUnion.RedAlertPlus.Api\global.json
+	EndProjectSection
+EndProject
+Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "ChinaRAUnion.RedAlertPlus.Api", "ChinaRAUnion.RedAlertPlus.Api\ChinaRAUnion.RedAlertPlus.Api.xproj", "{4EFA605A-7620-4584-B532-D7D267FBE254}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -229,6 +239,26 @@ Global
 		{B5C675D9-DBB5-441E-9029-D0950DB86BEB}.Release|x86.ActiveCfg = Release|x86
 		{B5C675D9-DBB5-441E-9029-D0950DB86BEB}.Release|x86.Build.0 = Release|x86
 		{B5C675D9-DBB5-441E-9029-D0950DB86BEB}.Release|x86.Deploy.0 = Release|x86
+		{4EFA605A-7620-4584-B532-D7D267FBE254}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4EFA605A-7620-4584-B532-D7D267FBE254}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4EFA605A-7620-4584-B532-D7D267FBE254}.Debug|ARM.ActiveCfg = Debug|Any CPU
+		{4EFA605A-7620-4584-B532-D7D267FBE254}.Debug|ARM.Build.0 = Debug|Any CPU
+		{4EFA605A-7620-4584-B532-D7D267FBE254}.Debug|Win32.ActiveCfg = Debug|Any CPU
+		{4EFA605A-7620-4584-B532-D7D267FBE254}.Debug|Win32.Build.0 = Debug|Any CPU
+		{4EFA605A-7620-4584-B532-D7D267FBE254}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{4EFA605A-7620-4584-B532-D7D267FBE254}.Debug|x64.Build.0 = Debug|Any CPU
+		{4EFA605A-7620-4584-B532-D7D267FBE254}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{4EFA605A-7620-4584-B532-D7D267FBE254}.Debug|x86.Build.0 = Debug|Any CPU
+		{4EFA605A-7620-4584-B532-D7D267FBE254}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4EFA605A-7620-4584-B532-D7D267FBE254}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4EFA605A-7620-4584-B532-D7D267FBE254}.Release|ARM.ActiveCfg = Release|Any CPU
+		{4EFA605A-7620-4584-B532-D7D267FBE254}.Release|ARM.Build.0 = Release|Any CPU
+		{4EFA605A-7620-4584-B532-D7D267FBE254}.Release|Win32.ActiveCfg = Release|Any CPU
+		{4EFA605A-7620-4584-B532-D7D267FBE254}.Release|Win32.Build.0 = Release|Any CPU
+		{4EFA605A-7620-4584-B532-D7D267FBE254}.Release|x64.ActiveCfg = Release|Any CPU
+		{4EFA605A-7620-4584-B532-D7D267FBE254}.Release|x64.Build.0 = Release|Any CPU
+		{4EFA605A-7620-4584-B532-D7D267FBE254}.Release|x86.ActiveCfg = Release|Any CPU
+		{4EFA605A-7620-4584-B532-D7D267FBE254}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
