@@ -11,16 +11,9 @@
 #include "MapInfo.h"
 #include "../Math/Collision.h"
 #include "TileSetInfo.h"
+#include "ModelViewProjectionConstantBuffer.h"
 
 DEFINE_NS_ENGINE
-
-// 用于向顶点着色器发送 MVP 矩阵的常量缓冲区。
-struct ModelViewProjectionConstantBuffer
-{
-	DirectX::XMFLOAT4X4 model;
-	DirectX::XMFLOAT4X4 view;
-	DirectX::XMFLOAT4X4 projection;
-};
 
 class TerrainRender : public IDeviceDependentResourcesContainer, public IRenderable
 {

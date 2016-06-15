@@ -9,7 +9,7 @@
 
 const wchar_t usage[] = LR"(SHP to DDS Converter
 Usage:
-shp2dds <source.shp> <source.pal> <dest.dds>
+shp2dds <source.shp> <source.pal> <dest.tani>
 )";
 
 int wmain(int argn, TCHAR* argv[])
@@ -18,7 +18,10 @@ int wmain(int argn, TCHAR* argv[])
 
 	SetConsoleCP(CP_WINUNICODE);
 	if (argn != 4)
+	{
 		_putws(usage);
+		return 0;
+	}
 
 	try
 	{

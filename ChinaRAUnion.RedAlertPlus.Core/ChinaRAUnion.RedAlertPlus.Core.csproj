@@ -118,6 +118,7 @@
     <Compile Include="Primitives\ResourceConfig.cs" />
     <Compile Include="Primitives\ResourceEntry.cs" />
     <Compile Include="Primitives\RulesConfig.cs" />
+    <Compile Include="Primitives\UnitArt.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Resource\IResourceManager.cs" />
     <Compile Include="Rules\IRulesLoader.cs" />

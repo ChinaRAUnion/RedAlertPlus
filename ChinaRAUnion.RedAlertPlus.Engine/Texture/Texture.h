@@ -13,7 +13,7 @@ DEFINE_NS_ENGINE
 struct DataToUpload
 {
 	std::unique_ptr<byte[]> data;
-	D3D12_SUBRESOURCE_DATA resData = {};
+	std::vector<D3D12_SUBRESOURCE_DATA> resData;
 	WRL::ComPtr<ID3D12Resource> resForUpload;
 };
 

@@ -82,9 +82,10 @@ namespace
 			LoadInfantry(rulesResolver);
 		}
 
-		virtual const std::unordered_map<std::wstring, Api::IInfantry*>& get_Infantry()
+		virtual const Api::IInfantry* FindInfantry(const std::wstring& name)
 		{
-			return _infantry;
+			auto it = _infantry.find(name);
+			return it == _infantry.end() ? nullptr : it->second;
 		}
 	private:
 		void LoadInfantry(IGameEngineRulesResolver^ rulesResolver)
@@ -108,7 +109,7 @@ GameEngine::GameEngine(IGameEngineResourceResolver^ resourceResolver, IGameEngin
 {
 	auto resolver = Make<ResourceResolver>(resourceResolver);
 	auto nativeRulesResolver = Make<RulesResolver>(rulesResolver);
-	ThrowIfFailed(CreateEngine(&_engine, resolver.Get()));
+	ThrowIfFailed(CreateEngine(&_engine, resolver.Get(), nativeRulesResolver.Get()));
 	_engine->SetSwapChainChangedHandler([weak = Platform::WeakReference(this)](IDXGISwapChain* swapChain)
 	{
 		if (auto me = weak.Resolve<GameEngine>())
@@ -254,4 +255,13 @@ void GameEngine::OnDpiChanged(Windows::Graphics::Display::DisplayInformation ^se
 void GameEngine::OnCompositionScaleChanged(Windows::UI::Xaml::Controls::SwapChainPanel ^sender, Platform::Object ^args)
 {
 	UpdateDisplayMetrices();
+}
+
+Platform::Object^ GameEngine::ObjectManager::get()
+{
+	WRL::ComPtr<NS_RAP::Api::IObjectManager> objManager;
+	_engine->GetObjectManager(&objManager);
+	WRL::ComPtr<IInspectable> inspManager;
+	ThrowIfFailed(objManager.As(&inspManager));
+	return reinterpret_cast<Platform::Object^>(inspManager.Get());
 }

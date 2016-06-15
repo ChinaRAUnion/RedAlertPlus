@@ -9,7 +9,7 @@ class Converter
 public:
 	Converter(const Palette& palette, const Shp& shp);
 
-	void Save(const std::wstring& fileName);
+	void Save(const std::wstring& taniFileName);
 private:
 	const Palette& _palette;
 	const Shp& _shp;

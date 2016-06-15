@@ -46,6 +46,25 @@ public:
 		auto res = _resourceResovler->ResolveMap(Platform::StringReference(name.c_str(), name.length()));
 		return ReadString(res);
 	}
+
+	virtual concurrency::task<NS_ENGINE::SpritePackageContent> ResolveSpritePackageFile(const std::wstring& name)
+	{
+		auto res = _resourceResovler->ResolveSpritePackageFile(Platform::StringReference(name.c_str(), name.length()));
+		auto image = co_await ReadStream(res->Image);
+		auto coordinate = co_await ReadString(res->Coordinate);
+		auto sequence = co_await ReadString(res->Sequence);
+		return{ image, coordinate, sequence };
+	}
+
+	virtual concurrency::task<NS_ENGINE::UnitArt> ResolveUnitArt(const std::wstring& name)
+	{
+		auto res = _resourceResovler->ResolveUnitArt(Platform::StringReference(name.c_str(), name.length()));
+		auto sprite = res->Sprite;
+		NS_ENGINE::UnitArt unitArt{ res->Remapable, std::wstring(sprite->Begin(), sprite->End()) };
+		for (auto&& offsetSrc : res->WeaponFireOffsets)
+			unitArt.WeaponFireOffsets.emplace_back(NS_ENGINE::WeaponFireOffset{ offsetSrc->Forward, offsetSrc->X, offsetSrc->Y });
+		return concurrency::task_from_result(unitArt);
+	}
 private:
 	Concurrency::task<std::vector<byte>> ReadStream(Windows::Storage::Streams::IRandomAccessStream^ stream)
 	{

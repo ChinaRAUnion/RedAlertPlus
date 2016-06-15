@@ -13,5 +13,7 @@ namespace ChinaRAUnion.RedAlertPlus.Primitives
         public InputStreamWithContentTypeResource[] Shaders { get; set; }
         public InputStreamWithContentTypeResource[] Maps { get; set; }
         public InputStreamWithContentTypeResource[] TileSets { get; set; }
+        public InputStreamWithContentTypeResource[] Sprites { get; set; }
+        public Dictionary<string, UnitArt> UnitArts { get; set; }
     }
 }

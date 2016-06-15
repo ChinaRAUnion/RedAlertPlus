@@ -26,6 +26,9 @@
     <Filter Include="头文件\Math">
       <UniqueIdentifier>{ec13c6a5-2c54-4989-99c2-b6cee143e389}</UniqueIdentifier>
     </Filter>
+    <Filter Include="头文件\Config">
+      <UniqueIdentifier>{e86d2149-e9b3-442f-bf56-769d6a837c21}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="dllmain.cpp">
@@ -61,6 +64,10 @@
     <ClCompile Include="Map\TileSetGraphicsProviderImpl.cpp">
       <Filter>源文件\Map</Filter>
     </ClCompile>
+    <ClCompile Include="Map\ObjectManager.cpp">
+      <Filter>源文件\Map</Filter>
+    </ClCompile>
+    <ClCompile Include="Config\SpriteReader.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h">
@@ -116,6 +123,15 @@
     </ClInclude>
     <ClInclude Include="Map\TileSetGraphicsProviderImpl.h">
       <Filter>头文件\Map</Filter>
+    </ClInclude>
+    <ClInclude Include="Map\ObjectManager.h">
+      <Filter>头文件\Map</Filter>
+    </ClInclude>
+    <ClInclude Include="Map\ModelViewProjectionConstantBuffer.h">
+      <Filter>头文件\Map</Filter>
+    </ClInclude>
+    <ClInclude Include="Config\SpriteReader.h">
+      <Filter>头文件\Config</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

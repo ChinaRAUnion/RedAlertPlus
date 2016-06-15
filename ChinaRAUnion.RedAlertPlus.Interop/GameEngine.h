@@ -28,12 +28,77 @@ public interface class ITileSetPackageContent
 	}
 };
 
+public interface class ISpritePackageContent
+{
+	property Windows::Storage::Streams::IInputStream^ Image
+	{
+		Windows::Storage::Streams::IInputStream^ get();
+	}
+
+	property Windows::Storage::Streams::IInputStream^ Coordinate
+	{
+		Windows::Storage::Streams::IInputStream^ get();
+	}
+
+	property Windows::Storage::Streams::IInputStream^ Sequence
+	{
+		Windows::Storage::Streams::IInputStream^ get();
+	}
+};
+
+namespace Primitives
+{
+	public ref class WeaponFireOffset sealed
+	{
+	public:
+		property uint32_t Forward
+		{
+			uint32_t get() { return _forward; }
+			void set(uint32_t value) { _forward = value; }
+		}
+
+		property uint32_t X
+		{
+			uint32_t get() { return _x; }
+			void set(uint32_t value) { _x = value; }
+		}
+
+		property uint32_t Y
+		{
+			uint32_t get() { return _y; }
+			void set(uint32_t value) { _y = value; }
+		}
+	private:
+		uint32_t _forward, _x, _y;
+	};
+
+	public interface class IUnitArt
+	{
+		property bool Remapable
+		{
+			bool get();
+		}
+
+		property Windows::Foundation::Collections::IVectorView<WeaponFireOffset^>^ WeaponFireOffsets
+		{
+			Windows::Foundation::Collections::IVectorView<WeaponFireOffset^>^ get();
+		}
+
+		property Platform::String^ Sprite
+		{
+			Platform::String^ get();
+		}
+	};
+}
+
 public interface class IGameEngineResourceResolver
 {
 	Windows::Storage::Streams::IRandomAccessStream^ ResolveShader(Platform::String^ name);
 	ITileSetPackageContent^ ResolveTileSetPackageFile(Platform::String^ name);
 	Windows::Storage::Streams::IRandomAccessStreamWithContentType^ ResolveTexture(Platform::String^ name);
 	Windows::Storage::Streams::IRandomAccessStream^ ResolveMap(Platform::String^ name);
+	ISpritePackageContent^ ResolveSpritePackageFile(Platform::String^ name);
+	Primitives::IUnitArt^ ResolveUnitArt(Platform::String^ name);
 };
 
 public interface class IGameEngineRulesResolver
@@ -85,6 +150,11 @@ public:
 	{
 		GameMode get() { return _gameMode; }
 		void set(GameMode value) { _gameMode = value; }
+	}
+
+	property Platform::Object^ ObjectManager
+	{
+		Platform::Object^ get();
 	}
 
 	void SetSwapChainPanel(Windows::UI::Xaml::Controls::SwapChainPanel^ panel);

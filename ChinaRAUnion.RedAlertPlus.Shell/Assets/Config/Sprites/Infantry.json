@@ -1,0 +1,9 @@
+﻿{
+  "Sprites": [
+    {
+      "name": "GI",
+      "source": "ms-appx:///Assets/Art/Units/gi.tani",
+      "contentType": "application/tomato-animation"
+    }
+  ]
+}

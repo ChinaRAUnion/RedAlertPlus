@@ -90,7 +90,6 @@
   <ItemGroup>
     <!-- A reference to the entire .Net Framework and Windows SDK are automatically included -->
     <Content Include="Assets\Art\ra2ts_l.ogv" />
-    <Content Include="Assets\Art\Units\gi.dds" />
     <Content Include="Assets\Config\UIArt.json" />
     <Content Include="Assets\Config\UIAudio.json" />
     <Content Include="Assets\Audio\drok.ogg" />
@@ -98,8 +97,10 @@
     <Content Include="Assets\Map\map1.json" />
     <Content Include="Assets\Config\TileSets.json" />
     <Content Include="Assets\Config\Maps.json" />
-    <Content Include="Assets\Config\Animation\Infantry.json" />
+    <Content Include="Assets\Config\Sprites\Infantry.json" />
     <Content Include="Assets\Config\Rules\Infantry.json" />
+    <Content Include="Assets\Art\Units\gi.tani" />
+    <Content Include="Assets\Config\Art\Infantry.json" />
     <None Include="project.json" />
     <PRIResource Include="Strings\en\GameStuff.resw" />
     <PRIResource Include="Strings\zh-Hans\GameStuff.resw" />

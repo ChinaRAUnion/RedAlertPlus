@@ -106,6 +106,15 @@
     <Content Include="..\ChinaRAUnion.RedAlertPlus.Shell\Assets\Config\Rules\Infantry.json">
       <Link>Assets\Config\Rules\Infantry.json</Link>
     </Content>
+    <Content Include="..\ChinaRAUnion.RedAlertPlus.Shell\Assets\Art\Units\gi.tani">
+      <Link>Assets\Art\Units\gi.tani</Link>
+    </Content>
+    <Content Include="..\ChinaRAUnion.RedAlertPlus.Shell\Assets\Config\Art\Infantry.json">
+      <Link>Assets\Config\Art\Infantry.json</Link>
+    </Content>
+    <Content Include="..\ChinaRAUnion.RedAlertPlus.Shell\Assets\Config\Sprites\Infantry.json">
+      <Link>Assets\Config\Sprites\Infantry.json</Link>
+    </Content>
     <None Include="project.json" />
     <PRIResource Include="Strings\en\Resources.resw" />
     <PRIResource Include="Strings\zh-Hans\Resources.resw" />
@@ -206,6 +215,7 @@
       <HintPath>..\ChinaRAUnion.RedAlertPlus.Api\bin\Debug\netstandard1.4\ChinaRAUnion.RedAlertPlus.Api.dll</HintPath>
     </Reference>
   </ItemGroup>
+  <ItemGroup />
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">
     <VisualStudioVersion>14.0</VisualStudioVersion>
   </PropertyGroup>

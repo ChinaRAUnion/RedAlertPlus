@@ -222,7 +222,6 @@ void TerrainRender::Update()
 
 void TerrainRender::Render()
 {
-	ThrowIfFailed(_deviceContext.CurrentCommandAllocator->Reset());
 	ThrowIfFailed(_commandList->Reset(_deviceContext.CurrentCommandAllocator, _pipelineState.Get()));
 	PIXBeginEvent(_commandList.Get(), 0, L"Draw the cube");
 	{
@@ -249,8 +248,6 @@ void TerrainRender::Render()
 		// ¼ÇÂ¼»æÖÆÃüÁî¡£
 		D3D12_CPU_DESCRIPTOR_HANDLE renderTargetView = _deviceContext.RenderTargetView;
 		D3D12_CPU_DESCRIPTOR_HANDLE depthStencilView = _deviceContext.DepthStencilView;
-		_commandList->ClearRenderTargetView(renderTargetView, DirectX::Colors::CornflowerBlue, 0, nullptr);
-		_commandList->ClearDepthStencilView(depthStencilView, D3D12_CLEAR_FLAG_DEPTH, 1.0f, 0, 0, nullptr);
 
 		_commandList->OMSetRenderTargets(1, &renderTargetView, false, &depthStencilView);
 

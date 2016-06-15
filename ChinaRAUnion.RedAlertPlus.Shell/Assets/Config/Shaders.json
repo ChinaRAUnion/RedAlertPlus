@@ -9,6 +9,16 @@
       "name": "TileLayerPS",
       "source": "ms-appx:///Assets/Shaders/TileLayerPS.cso",
       "contentType": "application/cso"
+    },
+    {
+      "name": "SpriteVS",
+      "source": "ms-appx:///Assets/Shaders/SpriteVS.cso",
+      "contentType": "application/cso"
+    },
+    {
+      "name": "SpritePS",
+      "source": "ms-appx:///Assets/Shaders/SpritePS.cso",
+      "contentType": "application/cso"
     }
   ]
 }

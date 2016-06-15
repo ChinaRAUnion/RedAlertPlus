@@ -10,12 +10,12 @@
 
 using namespace concurrency;
 
-HRESULT STDMETHODCALLTYPE CreateEngine(NS_ENGINE::IEngine** engine, NS_ENGINE::IResourceResovler* resourceResolver)
+HRESULT STDMETHODCALLTYPE CreateEngine(NS_ENGINE::IEngine** engine, NS_ENGINE::IResourceResovler* resourceResolver, NS_ENGINE::IRulesResolver* rulesResolver)
 {
 	try
 	{
 		ARGUMENT_NOTNULL_HR(engine);
-		*engine = WRL::Make<NS_ENGINE::Engine>(resourceResolver).Detach();
+		*engine = WRL::Make<NS_ENGINE::Engine>(resourceResolver, rulesResolver).Detach();
 		return S_OK;
 	}
 	CATCH_ALL();
@@ -24,10 +24,11 @@ HRESULT STDMETHODCALLTYPE CreateEngine(NS_ENGINE::IEngine** engine, NS_ENGINE::I
 using namespace NS_ENGINE;
 using namespace WRL;
 
-Engine::Engine(IResourceResovler* resourceResolver)
-	:_resourceResolver(resourceResolver)
+Engine::Engine(IResourceResovler* resourceResolver, IRulesResolver* rulesResolver)
+	:_resourceResolver(resourceResolver), _objectManager(Make<ObjectManager>(_deviceContext, resourceResolver, rulesResolver))
 {
-
+	_resourceContainers.emplace_back(_objectManager.Get());
+	_renderables.emplace_back(_objectManager.Get());
 }
 
 void Engine::SetSwapChainChangedHandler(std::function<void(IDXGISwapChain*)> handler)
@@ -91,6 +92,11 @@ void Engine::Render()
 void Engine::SetMapScrollSpeed(float x, float y)
 {
 	if (_map) _map->SetMapScrollSpeed(x, y);
+}
+
+void Engine::GetObjectManager(NS_RAP::Api::IObjectManager ** objectManager)
+{
+	ThrowIfFailed(_objectManager.CopyTo(objectManager));
 }
 
 concurrency::task<void> Engine::CreateWindowSizeDependentResources()

@@ -12,6 +12,12 @@
     <Content Include="$(SolutionDir)bin\Shaders\$(RedAlertPlus-Platform)\$(Configuration)\TileLayerVS.cso">
       <Link>Assets\Shaders\TileLayerVS.cso</Link>
     </Content>
+    <Content Include="$(SolutionDir)bin\Shaders\$(RedAlertPlus-Platform)\$(Configuration)\SpritePS.cso">
+      <Link>Assets\Shaders\SpritePS.cso</Link>
+    </Content>
+    <Content Include="$(SolutionDir)bin\Shaders\$(RedAlertPlus-Platform)\$(Configuration)\SpriteVS.cso">
+      <Link>Assets\Shaders\SpriteVS.cso</Link>
+    </Content>
   </ItemGroup>
   <PropertyGroup>
     <Win32Resource>$(SolutionDir)bin\Resources\$(RedAlertPlus-Platform)\$(Configuration)\Resource.res</Win32Resource>

@@ -241,6 +241,7 @@
     <ClInclude Include="..\include\engine\common.h" />
     <ClInclude Include="..\include\engine\Engine.h" />
     <ClInclude Include="..\include\engine\TileSetGraphicsProvider.h" />
+    <ClInclude Include="Config\SpriteReader.h" />
     <ClInclude Include="DeviceContext.h" />
     <ClInclude Include="EngineImpl.h" />
     <ClInclude Include="IDeviceDependentResourcesContainer.h" />
@@ -248,6 +249,8 @@
     <ClInclude Include="Map\Map.h" />
     <ClInclude Include="Map\MapInfo.h" />
     <ClInclude Include="Map\MapRenderer.h" />
+    <ClInclude Include="Map\ModelViewProjectionConstantBuffer.h" />
+    <ClInclude Include="Map\ObjectManager.h" />
     <ClInclude Include="Map\TerrainRender.h" />
     <ClInclude Include="Map\TileSetGraphicsProviderImpl.h" />
     <ClInclude Include="Map\TileSetInfo.h" />
@@ -258,6 +261,7 @@
     <ClInclude Include="Texture\TextureManager.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Config\SpriteReader.cpp" />
     <ClCompile Include="DeviceContext.cpp">
       <AssemblerOutput Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">AssemblyAndSourceCode</AssemblerOutput>
     </ClCompile>
@@ -266,6 +270,7 @@
     <ClCompile Include="Map\Map.cpp" />
     <ClCompile Include="Map\MapInfo.cpp" />
     <ClCompile Include="Map\MapRenderer.cpp" />
+    <ClCompile Include="Map\ObjectManager.cpp" />
     <ClCompile Include="Map\TerrainRender.cpp" />
     <ClCompile Include="Map\TileSetGraphicsProviderImpl.cpp" />
     <ClCompile Include="Map\TileSetInfo.cpp" />

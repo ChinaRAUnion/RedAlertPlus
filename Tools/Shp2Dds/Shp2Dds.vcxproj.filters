@@ -13,6 +13,12 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="源文件\minizip">
+      <UniqueIdentifier>{03124d3e-5c03-4e5a-ae6e-c2cd1f1aa24c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="源文件\zlib">
+      <UniqueIdentifier>{fc88261c-1041-458a-918e-9ccc69288ee1}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -33,6 +39,81 @@
     <ClInclude Include="Converter.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="minizip\aes\aes.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="minizip\aes\aes_via_ace.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="minizip\aes\aesopt.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="minizip\aes\aestab.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="minizip\aes\brg_endian.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="minizip\aes\brg_types.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="minizip\aes\entropy.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="minizip\aes\fileenc.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="minizip\aes\hmac.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="minizip\aes\prng.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="minizip\aes\pwd2key.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="minizip\aes\sha1.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="minizip\crypt.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="minizip\ioapi_buf.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="minizip\ioapi_mem.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="minizip\iowin32.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="zlib\crc32.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="zlib\deflate.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="zlib\gzguts.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="zlib\inffast.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="zlib\inffixed.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="zlib\inflate.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="zlib\inftrees.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="zlib\trees.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="zlib\zutil.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -45,6 +126,96 @@
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="Converter.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="minizip\aes\aescrypt.c">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="minizip\aes\aeskey.c">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="minizip\aes\aestab.c">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="minizip\aes\entropy.c">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="minizip\aes\fileenc.c">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="minizip\aes\hmac.c">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="minizip\aes\prng.c">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="minizip\aes\pwd2key.c">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="minizip\aes\sha1.c">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="minizip\ioapi.c">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="minizip\ioapi_buf.c">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="minizip\ioapi_mem.c">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="minizip\iowin32.c">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="minizip\unzip.c">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="minizip\zip.c">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="zlib\adler32.c">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="zlib\compress.c">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="zlib\crc32.c">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="zlib\deflate.c">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="zlib\gzclose.c">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="zlib\gzlib.c">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="zlib\gzread.c">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="zlib\gzwrite.c">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="zlib\infback.c">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="zlib\inffast.c">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="zlib\inflate.c">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="zlib\inftrees.c">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="zlib\trees.c">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="zlib\uncompr.c">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="zlib\zutil.c">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>

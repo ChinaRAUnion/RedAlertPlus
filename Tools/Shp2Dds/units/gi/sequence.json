@@ -1,0 +1,20 @@
+{
+  "Ready": {
+    "start": 0,
+    "length": 1,
+    "nextDirection": 1,
+    "direction": 0
+  },
+  "Guard": {
+    "start": 0,
+    "length": 1,
+    "nextDirection": 1,
+    "direction": 0
+  },
+  "Walk": {
+    "start": 8,
+    "length": 6,
+    "nextDirection": 6,
+    "direction": 0
+  }
+}

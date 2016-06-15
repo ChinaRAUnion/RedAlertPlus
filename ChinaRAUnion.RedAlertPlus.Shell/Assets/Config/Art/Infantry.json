@@ -1,0 +1,16 @@
+﻿{
+  "UnitArts": {
+    "GI": {
+      "cameo": "GIICON",
+      "sprite": "GI",
+      "remapable": true,
+      "weaponFireOffsets": [
+        {
+          "forward": 80,
+          "x": 0,
+          "y": 105
+        }
+      ]
+    }
+  }
+}

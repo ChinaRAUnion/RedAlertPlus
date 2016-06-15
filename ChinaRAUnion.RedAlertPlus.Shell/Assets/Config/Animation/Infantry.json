@@ -1,9 +1,0 @@
-﻿{
-  "Maps": [
-    {
-      "name": "map1",
-      "source": "ms-appx:///Assets/Map/map1.json",
-      "contentType": "text/json"
-    }
-  ]
-}

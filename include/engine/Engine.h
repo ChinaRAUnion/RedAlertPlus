@@ -28,6 +28,25 @@ struct TileSetPackageContent
 	std::vector<byte> ExtraImage;
 };
 
+struct SpritePackageContent
+{
+	std::vector<byte> Image;
+	std::wstring Coordinate;
+	std::wstring Sequence;
+};
+
+struct WeaponFireOffset
+{
+	uint32_t Forward, X, Y;
+};
+
+struct UnitArt
+{
+	bool Remapable;
+	std::wstring Sprite;
+	std::vector<WeaponFireOffset> WeaponFireOffsets;
+};
+
 struct BlobWithContentType
 {
 	std::vector<byte> Blob;
@@ -47,11 +66,13 @@ interface DECLSPEC_UUID("1B572D0E-8D92-4BE8-B71C-CD633D97134F") IResourceResovle
 	virtual concurrency::task<TileSetPackageContent> ResolveTileSetPackageFile(const std::wstring& name) = 0;
 	virtual concurrency::task<BlobWithContentType> ResolveTexture(const std::wstring& name) = 0;
 	virtual concurrency::task<std::wstring> ResolveMap(const std::wstring& name) = 0;
+	virtual concurrency::task<SpritePackageContent> ResolveSpritePackageFile(const std::wstring& name) = 0;
+	virtual concurrency::task<UnitArt> ResolveUnitArt(const std::wstring& name) = 0;
 };
 
 interface DECLSPEC_UUID("89D1AC22-2CBC-46A2-A0DC-E6A09CDC7A6C") IRulesResolver : public IUnknown
 {
-	virtual const std::unordered_map<std::wstring, Api::IInfantry*>& get_Infantry() = 0;
+	virtual const Api::IInfantry* FindInfantry(const std::wstring& name) = 0;
 };
 
 interface DECLSPEC_UUID("DDDF5DA6-E458-4894-ACFC-5045A30676F7") IEngine : public IUnknown
@@ -65,6 +86,7 @@ interface DECLSPEC_UUID("DDDF5DA6-E458-4894-ACFC-5045A30676F7") IEngine : public
 	virtual void Render() = 0;
 
 	virtual void SetMapScrollSpeed(float x, float y) = 0;
+	virtual void GetObjectManager(Api::IObjectManager** objectManager) = 0;
 };
 
 
@@ -72,5 +94,5 @@ END_NS_ENGINE
 
 extern "C"
 {
-	CRAU_ENGINE_API HRESULT STDMETHODCALLTYPE CreateEngine(NS_ENGINE::IEngine** engine, NS_ENGINE::IResourceResovler* resourceResolver);
+	CRAU_ENGINE_API HRESULT STDMETHODCALLTYPE CreateEngine(NS_ENGINE::IEngine** engine, NS_ENGINE::IResourceResovler* resourceResolver, NS_ENGINE::IRulesResolver* rulesResolver);
 }
