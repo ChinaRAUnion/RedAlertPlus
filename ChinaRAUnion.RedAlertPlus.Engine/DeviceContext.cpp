@@ -303,6 +303,7 @@ void DeviceContext::WaitForGpu()
 
 	// 对当前帧递增围栏值。
 	CurrentFence()++;
+	_resourcesWaitForUpload.clear();
 }
 
 void DeviceContext::UpdateOutputSize()
@@ -367,4 +368,51 @@ void DeviceContext::Present()
 
 		MoveToNextFrame();
 	}
+}
+
+void DeviceContext::UploadResource(IUnknown * resource)
+{
+	_resourcesWaitForUpload.emplace_back(resource);
+}
+
+WRL::ComPtr<ID3D12Resource> DeviceContext::CreateVertexBuffer(ID3D12GraphicsCommandList * commandList, const void * data, size_t dataSize)
+{
+	ComPtr<ID3D12Resource> vertexBuffer;
+	// 在 GPU 的默认堆中创建顶点缓冲区资源并使用上载堆将顶点数据复制到其中。
+	// 在 GPU 使用完之前，不得释放上载资源。
+	Microsoft::WRL::ComPtr<ID3D12Resource> vertexBufferUpload;
+
+	CD3DX12_HEAP_PROPERTIES defaultHeapProperties(D3D12_HEAP_TYPE_DEFAULT);
+	CD3DX12_RESOURCE_DESC vertexBufferDesc = CD3DX12_RESOURCE_DESC::Buffer(dataSize);
+	ThrowIfFailed(_d3dDevice->CreateCommittedResource(
+		&defaultHeapProperties,
+		D3D12_HEAP_FLAG_NONE,
+		&vertexBufferDesc,
+		D3D12_RESOURCE_STATE_COPY_DEST,
+		nullptr,
+		IID_PPV_ARGS(&vertexBuffer)));
+
+	CD3DX12_HEAP_PROPERTIES uploadHeapProperties(D3D12_HEAP_TYPE_UPLOAD);
+	ThrowIfFailed(_d3dDevice->CreateCommittedResource(
+		&uploadHeapProperties,
+		D3D12_HEAP_FLAG_NONE,
+		&vertexBufferDesc,
+		D3D12_RESOURCE_STATE_GENERIC_READ,
+		nullptr,
+		IID_PPV_ARGS(&vertexBufferUpload)));
+	// 将顶点缓冲区上载到 GPU。
+	{
+		D3D12_SUBRESOURCE_DATA vertexData = {};
+		vertexData.pData = data;
+		vertexData.RowPitch = dataSize;
+		vertexData.SlicePitch = vertexData.RowPitch;
+
+		UpdateSubresources(commandList, vertexBuffer.Get(), vertexBufferUpload.Get(), 0, 0, 1, &vertexData);
+
+		CD3DX12_RESOURCE_BARRIER vertexBufferResourceBarrier =
+			CD3DX12_RESOURCE_BARRIER::Transition(vertexBuffer.Get(), D3D12_RESOURCE_STATE_COPY_DEST, D3D12_RESOURCE_STATE_VERTEX_AND_CONSTANT_BUFFER);
+		commandList->ResourceBarrier(1, &vertexBufferResourceBarrier);
+	}
+	UploadResource(vertexBufferUpload.Get());
+	return vertexBuffer;
 }

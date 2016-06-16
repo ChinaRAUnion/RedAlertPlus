@@ -17,5 +17,9 @@ SpriteCoordinateReader::SpriteCoordinateReader(float imageWidth, float imageHeig
 	GenericDocument<UTF16<>> document;
 	document.Parse(json);
 
-
+	{
+		auto&& jSize = document[L"size"];
+		Width = jSize[L"width"].GetUint();
+		Height = jSize[L"height"].GetUint();
+	}
 }

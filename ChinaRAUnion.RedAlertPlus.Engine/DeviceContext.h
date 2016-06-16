@@ -60,6 +60,9 @@ public:
 	void ExecuteCommandList(ID3D12CommandList* commandList);
 	void Present();
 
+	void UploadResource(IUnknown* resource);
+	WRL::ComPtr<ID3D12Resource> CreateVertexBuffer(ID3D12GraphicsCommandList* commandList, const void* data, size_t dataSize);
+
 	static constexpr UINT FrameCount = 3;		// ÈýÖØ»º³å
 private:
 	void CreateDeviceIndependentResources();
@@ -92,6 +95,7 @@ private:
 	WRL::ComPtr<ID3D12Resource> _depthStencil;
 	WRL::ComPtr<ID3D12Fence> _fence;
 	WRL::ComPtr<IDXGISwapChain3> _swapChain;
+	std::vector<WRL::ComPtr<IUnknown>> _resourcesWaitForUpload;
 	D3D12_VIEWPORT _screenViewport;
 	::NS_ENGINE::TextureManager _textureManager;
 

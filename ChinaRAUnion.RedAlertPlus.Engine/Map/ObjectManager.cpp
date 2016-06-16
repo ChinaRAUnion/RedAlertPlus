@@ -17,21 +17,10 @@ namespace
 	constexpr wchar_t SpriteVSName[] = L"SpriteVS";
 	constexpr wchar_t SpritePSName[] = L"SpritePS";
 
-#pragma pack(push, 1)
-	struct SpriteVertex
-	{
-		DirectX::XMFLOAT3 pos;
-		UINT Id;
-		UINT Remapable;
-	};
-#pragma pack(pop)
-	static_assert(sizeof(SpriteVertex) == 20, "Invalid SpriteVertex Size.");
-
 	static const D3D12_INPUT_ELEMENT_DESC inputLayout[] =
 	{
 		{ "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0 },
-		{ "Id", 0, DXGI_FORMAT_R32_UINT, 0, 12, D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0 },
-		{ "Remapable", 0, DXGI_FORMAT_R32_UINT, 0, 16, D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0 },
+		{ "Remapable", 0, DXGI_FORMAT_R32_UINT, 0, 12, D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0 },
 	};
 
 	static const UINT c_alignedConstantBufferSize = (sizeof(ModelViewProjectionConstantBuffer) + 255) & ~255;
@@ -40,6 +29,7 @@ namespace
 ObjectManager::ObjectManager(DeviceContext & deviceContext, IResourceResovler* resourceResolver, IRulesResolver* rulesResolver)
 	:_deviceContext(deviceContext), _resourceResolver(resourceResolver), _rulesResolver(rulesResolver)
 {
+
 }
 
 concurrency::task<void> ObjectManager::CreateDeviceDependentResources(IResourceResovler * resourceResolver)
@@ -167,7 +157,10 @@ concurrency::task<void> ObjectManager::CreateDeviceDependentResources(IResourceR
 	auto sprite = co_await resourceResolver->ResolveSpritePackageFile(art.Sprite);
 	_giTexture = _deviceContext.TextureManager.CreateTexture2D(sprite.Image.data(), sprite.Image.size(), L"image/dds");
 	
-	SpriteCoordinateReader coordinateReader(_giTexture.Width, _giTexture.Height, sprite.Coordinate);
+	auto coordinateReader = std::make_shared<SpriteCoordinateReader>(_giTexture.Width, _giTexture.Height, sprite.Coordinate);
+	auto sequenceReader = std::make_shared<SpriteSequenceReader>(sprite.Sequence);
+
+	_spriteBatches.emplace<std::wstring, SpriteBatch>(L"GI", { _deviceContext, _giTexture, coordinateReader, sequenceReader });
 }
 
 concurrency::task<void> ObjectManager::CreateWindowSizeDependentResources(IResourceResovler * resourceResolver)
@@ -275,4 +268,33 @@ STDMETHODIMP ObjectManager::raw_PlaceInfantry(BSTR name, ULONG x, ULONG y, VARIA
 		return S_OK;
 	}
 	CATCH_ALL();
+}
+
+ObjectManager::SpriteObject::SpriteObject(DeviceContext & deviceContext, Texture & texture, std::shared_ptr<SpriteCoordinateReader>& coordinate, std::shared_ptr<SpriteSequenceReader>& sequence)
+	:_deviceContext(deviceContext), _texture(texture), _coordinate(coordinate), _sequence(sequence)
+{
+}
+
+ObjectManager::SpriteBatch::SpriteBatch(DeviceContext & deviceContext, Texture & texture, std::shared_ptr<SpriteCoordinateReader>& coordinate, std::shared_ptr<SpriteSequenceReader>& sequence)
+	: _deviceContext(deviceContext), _texture(texture), _coordinate(coordinate), _sequence(sequence)
+{
+	const auto width = float(coordinate->Width) / 2.f;
+	const auto height = float(coordinate->Height) / 2.f;
+	const UINT remapable = 1;
+
+	SpriteVertex vertices[] =
+	{
+		{ { -width, height, 0.5f }, remapable },
+		{ { width, height, 0.5f }, remapable },
+		{ { -width, -height, 0.5f }, remapable },
+		{ { width, -height, 0.5f }, remapable }
+	};
+
+	ComPtr<ID3D12GraphicsCommandList> commandList;
+	_deviceContext.CreateCommandList(0, D3D12_COMMAND_LIST_TYPE_DIRECT, nullptr, IID_PPV_ARGS(&commandList));
+
+	_vertexBuffer = _deviceContext.CreateVertexBuffer(commandList.Get(), vertices, sizeof(vertices));
+
+	ThrowIfFailed(commandList->Close());
+	deviceContext.ExecuteCommandList(commandList.Get());
 }

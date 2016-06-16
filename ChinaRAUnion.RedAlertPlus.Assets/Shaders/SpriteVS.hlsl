@@ -10,7 +10,6 @@ cbuffer ModelViewProjectionConstantBuffer : register(b0)
 struct VertexShaderInput
 {
 	float3 pos : POSITION;
-	uint id : Id;
 	uint remapable : Remapable;
 };
 

@@ -24,6 +24,7 @@ struct SpriteCoordinateReader
 	SpriteCoordinateReader(float imageWidth, float imageHeight, const std::wstring& json);
 
 	std::vector<SpriteFrame> Frames;
+	uint32_t Width, Height;
 };
 
 struct SpriteSequenceReader
