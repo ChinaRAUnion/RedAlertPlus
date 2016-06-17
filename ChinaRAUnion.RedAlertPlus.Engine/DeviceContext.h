@@ -61,7 +61,14 @@ public:
 	void Present();
 
 	void UploadResource(IUnknown* resource);
-	WRL::ComPtr<ID3D12Resource> CreateVertexBuffer(ID3D12GraphicsCommandList* commandList, const void* data, size_t dataSize);
+	WRL::ComPtr<ID3D12Resource> CreateVertexBuffer(ID3D12GraphicsCommandList* commandList, const void* data, size_t dataSize, size_t stride, D3D12_VERTEX_BUFFER_VIEW& vertexBufferView);
+
+	template<typename TIt>
+	WRL::ComPtr<ID3D12Resource> CreateVertexBuffer(ID3D12GraphicsCommandList* commandList, TIt begin, TIt end, D3D12_VERTEX_BUFFER_VIEW& vertexBufferView)
+	{
+		const auto stride = sizeof(decltype(*begin));
+		return CreateVertexBuffer(commandList, std::addressof(*begin), (end - begin) * stride, stride, vertexBufferView);
+	}
 
 	static constexpr UINT FrameCount = 3;		// ÈýÖØ»º³å
 private:

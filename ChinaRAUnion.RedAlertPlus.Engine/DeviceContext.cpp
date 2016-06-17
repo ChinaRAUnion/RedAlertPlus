@@ -375,7 +375,7 @@ void DeviceContext::UploadResource(IUnknown * resource)
 	_resourcesWaitForUpload.emplace_back(resource);
 }
 
-WRL::ComPtr<ID3D12Resource> DeviceContext::CreateVertexBuffer(ID3D12GraphicsCommandList * commandList, const void * data, size_t dataSize)
+WRL::ComPtr<ID3D12Resource> DeviceContext::CreateVertexBuffer(ID3D12GraphicsCommandList * commandList, const void * data, size_t dataSize, size_t stride, D3D12_VERTEX_BUFFER_VIEW& vertexBufferView)
 {
 	ComPtr<ID3D12Resource> vertexBuffer;
 	// 在 GPU 的默认堆中创建顶点缓冲区资源并使用上载堆将顶点数据复制到其中。
@@ -414,5 +414,9 @@ WRL::ComPtr<ID3D12Resource> DeviceContext::CreateVertexBuffer(ID3D12GraphicsComm
 		commandList->ResourceBarrier(1, &vertexBufferResourceBarrier);
 	}
 	UploadResource(vertexBufferUpload.Get());
+	// 创建顶点/索引缓冲区视图。
+	vertexBufferView.BufferLocation = vertexBuffer->GetGPUVirtualAddress();
+	vertexBufferView.StrideInBytes = stride;
+	vertexBufferView.SizeInBytes = dataSize;
 	return vertexBuffer;
 }

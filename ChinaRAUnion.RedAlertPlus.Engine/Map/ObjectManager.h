@@ -37,6 +37,14 @@ class ObjectManager : public WRL::RuntimeClass<WRL::RuntimeClassFlags<WRL::WinRt
 	};
 
 	static_assert(sizeof(SpriteVertex) == 16, "Invalid SpriteVertex Size.");
+
+	struct SpriteInstance
+	{
+		DirectX::XMFLOAT2 Offset;
+		UINT FrameId;
+	};
+
+	static_assert(sizeof(SpriteInstance) == 12, "Invalid SpriteInstance Size.");
 #pragma pack(pop)
 
 	class SpriteObject
@@ -44,11 +52,11 @@ class ObjectManager : public WRL::RuntimeClass<WRL::RuntimeClassFlags<WRL::WinRt
 	public:
 		SpriteObject(DeviceContext& deviceContext, Texture& texture, std::shared_ptr<SpriteCoordinateReader>& coordinate, std::shared_ptr<SpriteSequenceReader>& sequence);
 
-		const std::vector<SpriteVertex>& GetVertices() const noexcept { return _vertices; }
+		const SpriteInstance& GetInstance() const noexcept { return _instance; }
 	private:
 		DeviceContext& _deviceContext;
 		Texture& _texture;
-		std::vector<SpriteVertex> _vertices;
+		SpriteInstance _instance;
 		std::shared_ptr<SpriteCoordinateReader> _coordinate;
 		std::shared_ptr<SpriteSequenceReader> _sequence;
 	};
@@ -68,7 +76,13 @@ class ObjectManager : public WRL::RuntimeClass<WRL::RuntimeClassFlags<WRL::WinRt
 		std::shared_ptr<SpriteCoordinateReader> _coordinate;
 		std::shared_ptr<SpriteSequenceReader> _sequence;
 		std::unordered_map<size_t, SpriteObject> _sprites;
-		WRL::ComPtr<ID3D12Resource> _vertexBuffer;
+		WRL::ComPtr<ID3D12Resource> _vertexBuffer, _instanceVB;
+		D3D12_VERTEX_BUFFER_VIEW _vertexBufferView, _instanceVBV;
+		size_t _instanceCount = 0;
+
+		WRL::ComPtr<ID3D12DescriptorHeap> _sequenceUavHeap;
+		bool _isDirty = false;
+		size_t _nextAvailId = 0;
 	};
 public:
 	ObjectManager(DeviceContext& deviceContext, IResourceResovler* resourceResolver, IRulesResolver* rulesResolver);

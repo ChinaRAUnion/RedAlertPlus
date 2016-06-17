@@ -11,6 +11,8 @@ struct VertexShaderInput
 {
 	float3 pos : POSITION;
 	uint remapable : Remapable;
+	float2 offset : Offset;
+	uint frameId : FrameId;
 };
 
 // 通过像素着色器传递的每个像素的颜色数据。
@@ -28,6 +30,7 @@ PixelShaderInput main(VertexShaderInput input)
 
 	// 将顶点位置转换为投影空间。
 	//pos = mul(pos, model);
+	pos += float4(input.offset, 0.f, 0.f);
 	pos = mul(pos, view);
 	pos = mul(pos, projection);
 	output.pos = pos;

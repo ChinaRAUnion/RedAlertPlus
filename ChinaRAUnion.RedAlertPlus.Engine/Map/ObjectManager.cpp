@@ -21,6 +21,8 @@ namespace
 	{
 		{ "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0 },
 		{ "Remapable", 0, DXGI_FORMAT_R32_UINT, 0, 12, D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0 },
+		{ "Offset", 0, DXGI_FORMAT_R32G32_FLOAT, 1, 0, D3D12_INPUT_CLASSIFICATION_PER_INSTANCE_DATA, 1 },
+		{ "FrameId", 0, DXGI_FORMAT_R32_UINT, 1, 8, D3D12_INPUT_CLASSIFICATION_PER_INSTANCE_DATA, 1 },
 	};
 
 	static const UINT c_alignedConstantBufferSize = (sizeof(ModelViewProjectionConstantBuffer) + 255) & ~255;
@@ -161,6 +163,7 @@ concurrency::task<void> ObjectManager::CreateDeviceDependentResources(IResourceR
 	auto sequenceReader = std::make_shared<SpriteSequenceReader>(sprite.Sequence);
 
 	_spriteBatches.emplace<std::wstring, SpriteBatch>(L"GI", { _deviceContext, _giTexture, coordinateReader, sequenceReader });
+	_spriteBatches.find(L"GI")->second.Attach(SpriteObject(_deviceContext, _giTexture, coordinateReader, sequenceReader));
 }
 
 concurrency::task<void> ObjectManager::CreateWindowSizeDependentResources(IResourceResovler * resourceResolver)
@@ -205,6 +208,9 @@ void ObjectManager::Update()
 	// 更新常量缓冲区资源。
 	UINT8* destination = _mappedConstantBuffer + (_deviceContext.CurrentFrameIndex * c_alignedConstantBufferSize);
 	memcpy_s(destination, sizeof(_constantData), &_constantData, sizeof(_constantData));
+
+	for (auto&& batch : _spriteBatches)
+		batch.second.Update();
 }
 
 void ObjectManager::Render()
@@ -240,10 +246,12 @@ void ObjectManager::Render()
 
 		_commandList->OMSetRenderTargets(1, &renderTargetView, false, &depthStencilView);
 
-		_commandList->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+		_commandList->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLESTRIP);
 		_commandList->SetDescriptorHeaps(1, descHeaps);
 		_commandList->SetGraphicsRootDescriptorTable(1, _giTexture.GPUHandle);
 
+		for (auto&& batch : _spriteBatches)
+			batch.second.Render(_commandList.Get());
 		//std::vector<TerrianNode_t*> nodes;
 		//_terrainTree.HitTest(nodes, _currentViewRect);
 		//for (auto&& node : nodes)
@@ -271,8 +279,9 @@ STDMETHODIMP ObjectManager::raw_PlaceInfantry(BSTR name, ULONG x, ULONG y, VARIA
 }
 
 ObjectManager::SpriteObject::SpriteObject(DeviceContext & deviceContext, Texture & texture, std::shared_ptr<SpriteCoordinateReader>& coordinate, std::shared_ptr<SpriteSequenceReader>& sequence)
-	:_deviceContext(deviceContext), _texture(texture), _coordinate(coordinate), _sequence(sequence)
+	:_deviceContext(deviceContext), _texture(texture), _coordinate(coordinate), _sequence(sequence), _instance({})
 {
+	
 }
 
 ObjectManager::SpriteBatch::SpriteBatch(DeviceContext & deviceContext, Texture & texture, std::shared_ptr<SpriteCoordinateReader>& coordinate, std::shared_ptr<SpriteSequenceReader>& sequence)
@@ -290,11 +299,68 @@ ObjectManager::SpriteBatch::SpriteBatch(DeviceContext & deviceContext, Texture &
 		{ { width, -height, 0.5f }, remapable }
 	};
 
+	auto d3dDevice = _deviceContext.D3DDevice;
+
+	{
+		D3D12_DESCRIPTOR_HEAP_DESC heapDesc = {};
+		heapDesc.NumDescriptors = 1;
+		heapDesc.Type = D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV;
+		// 此标志指示此描述符堆可以绑定到管道，并且其中包含的描述符可以由根表引用。
+		heapDesc.Flags = D3D12_DESCRIPTOR_HEAP_FLAG_SHADER_VISIBLE;
+		ThrowIfFailed(d3dDevice->CreateDescriptorHeap(&heapDesc, IID_PPV_ARGS(&_sequenceUavHeap)));
+	}
+
 	ComPtr<ID3D12GraphicsCommandList> commandList;
 	_deviceContext.CreateCommandList(0, D3D12_COMMAND_LIST_TYPE_DIRECT, nullptr, IID_PPV_ARGS(&commandList));
 
-	_vertexBuffer = _deviceContext.CreateVertexBuffer(commandList.Get(), vertices, sizeof(vertices));
+	_vertexBuffer = _deviceContext.CreateVertexBuffer(commandList.Get(), std::begin(vertices), std::end(vertices), _vertexBufferView);
 
 	ThrowIfFailed(commandList->Close());
 	deviceContext.ExecuteCommandList(commandList.Get());
+}
+
+void ObjectManager::SpriteBatch::Update()
+{
+	if (_isDirty)
+	{
+		std::vector<SpriteInstance> instanceData;
+		instanceData.reserve(_sprites.size());
+		for (auto&& sprite : _sprites)
+			instanceData.emplace_back(sprite.second.GetInstance());
+
+		if (instanceData.empty())
+		{
+			_instanceVB.Reset();
+			_instanceVBV = {};
+		}
+		else
+		{
+			ComPtr<ID3D12GraphicsCommandList> commandList;
+			_deviceContext.CreateCommandList(0, D3D12_COMMAND_LIST_TYPE_DIRECT, nullptr, IID_PPV_ARGS(&commandList));
+			_instanceVB = _deviceContext.CreateVertexBuffer(commandList.Get(), std::begin(instanceData), std::end(instanceData), _instanceVBV);
+
+			ThrowIfFailed(commandList->Close());
+			_deviceContext.ExecuteCommandList(commandList.Get());
+		}
+		_instanceCount = instanceData.size();
+		_isDirty = false;
+	}
+}
+
+void ObjectManager::SpriteBatch::Render(ID3D12GraphicsCommandList * commandList)
+{
+	if (_instanceCount)
+	{
+		commandList->IASetVertexBuffers(0, 1, &_vertexBufferView);
+		commandList->IASetVertexBuffers(1, 1, &_instanceVBV);
+		commandList->DrawInstanced(4, _instanceCount, 0, 0);
+	}
+}
+
+size_t ObjectManager::SpriteBatch::Attach(SpriteObject && object)
+{
+	auto id = _nextAvailId++;
+	_sprites.emplace(id, std::move(object));
+	_isDirty = true;
+	return id;
 }

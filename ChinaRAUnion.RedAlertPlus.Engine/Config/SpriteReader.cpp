@@ -23,3 +23,9 @@ SpriteCoordinateReader::SpriteCoordinateReader(float imageWidth, float imageHeig
 		Height = jSize[L"height"].GetUint();
 	}
 }
+
+SpriteSequenceReader::SpriteSequenceReader(const std::wstring & json)
+{
+	GenericDocument<UTF16<>> document;
+	document.Parse(json);
+}

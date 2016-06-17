@@ -28,7 +28,10 @@ concurrency::task<void> Map::InitializeAsync(IResourceResovler * resourceResolve
 		_mapInfo = std::make_shared<MapInfo>(mapData);
 	}
 	else
-		_mapInfo = std::make_shared<MapInfo>(co_await MapInfo::Generate(_deviceContext.TextureManager, _mapGenOptions, resourceResolver));
+	{
+		auto mapInfo = co_await MapInfo::Generate(_deviceContext.TextureManager, _mapGenOptions, resourceResolver);
+		_mapInfo = std::make_shared<MapInfo>(std::move(mapInfo));
+	}
 
 	_mapRender.SetMap(_mapInfo);
 }
