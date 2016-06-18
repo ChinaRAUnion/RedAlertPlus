@@ -1,5 +1,6 @@
 ﻿using Caliburn.Micro;
 using ChinaRAUnion.RedAlertPlus.Resource;
+using ChinaRAUnion.RedAlertPlus.Rules;
 using ChinaRAUnion.RedAlertPlus.Services;
 using ChinaRAUnion.RedAlertPlus.Shell.Areas.MainMenu.ViewModels;
 using System;
@@ -41,6 +42,7 @@ namespace ChinaRAUnion.RedAlertPlus.Shell.ViewModels
         private async Task LoadResources()
         {
             await _resourceManager.InitializeAsync();
+            await IoC.Get<IRulesLoader>().InitializeAsync();
         }
     }
 }

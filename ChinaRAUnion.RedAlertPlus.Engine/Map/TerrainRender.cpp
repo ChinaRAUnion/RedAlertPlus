@@ -226,6 +226,7 @@ void TerrainRender::Render()
 	PIXBeginEvent(_commandList.Get(), 0, L"Draw the cube");
 	{
 		// 设置要由此帧使用的图形根签名和描述符堆。
+		_commandList->SetPipelineState(_pipelineState.Get());
 		_commandList->SetGraphicsRootSignature(_rootSignature.Get());
 		ID3D12DescriptorHeap* descHeaps[] = { _deviceContext.TextureManager.GetHeap() };
 

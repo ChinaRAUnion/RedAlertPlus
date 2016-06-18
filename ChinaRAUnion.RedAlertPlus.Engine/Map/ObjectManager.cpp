@@ -218,6 +218,7 @@ void ObjectManager::Render()
 	ThrowIfFailed(_commandList->Reset(_deviceContext.CurrentCommandAllocator, _pipelineState.Get()));
 	PIXBeginEvent(_commandList.Get(), 0, L"Draw the cube");
 	{
+		_commandList->SetPipelineState(_pipelineState.Get());
 		// 设置要由此帧使用的图形根签名和描述符堆。
 		_commandList->SetGraphicsRootSignature(_rootSignature.Get());
 		ID3D12DescriptorHeap* descHeaps[] = { _deviceContext.TextureManager.GetHeap() };

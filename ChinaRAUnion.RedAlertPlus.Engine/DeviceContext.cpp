@@ -146,9 +146,10 @@ void DeviceContext::CreateDeviceResources()
 	ThrowIfFailed(CreateDXGIFactory1(IID_PPV_ARGS(&_dxgiFactory)));
 
 	ComPtr<IDXGIAdapter1> adapter;
-	GetHardwareAdapter(_dxgiFactory.Get(), &adapter);
-	DumpAdapterInfo(_logger, adapter.Get());
-	auto hr = D3D12CreateDevice(adapter.Get(), D3D_FEATURE_LEVEL_11_0, IID_PPV_ARGS(&_d3dDevice));
+	//GetHardwareAdapter(_dxgiFactory.Get(), &adapter);
+	//DumpAdapterInfo(_logger, adapter.Get());
+	//auto hr = D3D12CreateDevice(adapter.Get(), D3D_FEATURE_LEVEL_11_0, IID_PPV_ARGS(&_d3dDevice));
+	auto hr = E_FAIL;
 	if (FAILED(hr))
 	{
 		_logger->Information(L"使用 WARP 设备。");

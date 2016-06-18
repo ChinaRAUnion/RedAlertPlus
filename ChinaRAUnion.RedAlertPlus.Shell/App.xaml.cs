@@ -79,7 +79,10 @@ namespace ChinaRAUnion.RedAlertPlus.Shell
                                     new Uri("ms-appx:///Assets/Config/UIAudio.json"),
                                     new Uri("ms-appx:///Assets/Config/Shaders.json"),
                                     new Uri("ms-appx:///Assets/Config/TileSets.json"),
-                                    new Uri("ms-appx:///Assets/Config/Maps.json"));
+                                    new Uri("ms-appx:///Assets/Config/Maps.json"),
+                                    new Uri("ms-appx:///Assets/Config/Sprites/Infantry.json"),
+                                    new Uri("ms-appx:///Assets/Config/Art/Infantry.json"))
+                .UseRulesLoader(new Uri("ms-appx:///Assets/Config/Rules/Infantry.json"));
             _container.UseAudio();
             _eventAggregator = _container.GetInstance<IEventAggregator>();
             ViewModelBinder.ApplyConventionsByDefault = false;
